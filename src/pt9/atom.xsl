@@ -7,7 +7,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <html>
   <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link type="text/css" rel="stylesheet" href="../../css/program-think.css" />
+  <link type="text/css" rel="stylesheet" href="../css/program-think.css" />
   </head>
   <body>
   <h1><xsl:value-of select="feed/title"/></h1>
