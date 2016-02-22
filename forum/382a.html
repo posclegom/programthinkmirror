@@ -1,11 +1,11 @@
-<html>
+<html xmlns:my="http://www.w3.org/2005/Atom">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link type="text/css" rel="stylesheet" href="../css/program-think.css">
 </head>
 <body>
 <h1>Comments on 编程随想的博客: 文件加密的扫盲介绍</h1>
-<p><strong><font color="red">updated </font></strong>2013-07-02T17:23:38.933+08:00<br><strong><font color="red">content </font></strong>TO Curtis Wilbur&lt;br /&gt;补充一下你说的。&lt;br /&gt;光追加到图片文件尾部，隐藏效果不够好。&lt;br /&gt;&lt;br /&gt;更好的隐藏方式是：采用“图像隐写术”&lt;br /&gt;把加密内容隐写到图像中。&lt;br /&gt;缺点是，如果要隐写的数据较多，就需要很大很大的图片。&lt;br /&gt;&lt;br /&gt;关于这方面的介绍，可以看俺的博文&lt;br /&gt;《[url=https://program-think.blogspot.com/2011/06/use-image-hide-information.html]用图片隐藏信息的技术实现[/url]》<br><strong><font color="red">author </font></strong>编程随想</p>
+<p><strong><font color="red">updated </font></strong>2013-07-02T17:23:38.933+08:00<br><strong><font color="red">content </font></strong>TO Curtis Wilbur&lt;br /&gt;补充一下你说的。&lt;br /&gt;光追加到图片文件尾部，隐藏效果不够好。&lt;br /&gt;&lt;br /&gt;更好的隐藏方式是：采用“图像隐写术”&lt;br /&gt;把加密内容隐写到图像中。&lt;br /&gt;缺点是，如果要隐写的数据较多，就需要很大很大的图片。&lt;br /&gt;&lt;br /&gt;关于这方面的介绍，可以看俺的博文&lt;br /&gt;《[url=http://program-think.blogspot.com/2011/06/use-image-hide-information.html]用图片隐藏信息的技术实现[/url]》<br><strong><font color="red">author </font></strong>编程随想</p>
 <p><strong><font color="red">updated </font></strong>2013-06-28T14:26:06.692+08:00<br><strong><font color="red">content </font></strong>对于单文件，通过加密（算法是公开算法），再隐藏（例如将它追加到图片或者其他文件的末尾），安全性应该不错的。使用的时候通过专门的软件提取被加密隐藏的文件。<br><strong><font color="red">author </font></strong>Curtis Wilbur</p>
 <p><strong><font color="red">updated </font></strong>2013-06-24T17:01:30.464+08:00<br><strong><font color="red">content </font></strong>TO noname&lt;br /&gt;多谢对俺的关心 :)&lt;br /&gt;俺一定会尽量小心，以便跟朝廷做长期斗争。<br><strong><font color="red">author </font></strong>编程随想</p>
 <p><strong><font color="red">updated </font></strong>2013-06-20T02:37:16.481+08:00<br><strong><font color="red">content </font></strong>说什么，什么就到，那张&amp;quot;玉照&amp;quot;还是很贴切的。&lt;br /&gt;博主更要注意网络安全，切勿大意。&lt;br /&gt;<br><strong><font color="red">author </font></strong>noname</p>
@@ -30,6 +30,6 @@
 <p><strong><font color="red">updated </font></strong>2011-05-14T18:43:07.636+08:00<br><strong><font color="red">content </font></strong>楼上的同学：&lt;br /&gt;关于“从Vista开始，简化了EFS的密钥导入/导出操作”这一点，俺已经补充到原文中。&lt;br /&gt;多谢提醒 :)<br><strong><font color="red">author </font></strong>编程随想</p>
 <p><strong><font color="red">updated </font></strong>2011-05-14T18:31:49.256+08:00<br><strong><font color="red">content </font></strong>楼上同学的反馈很迅速啊:)&lt;br /&gt;不过，俺写的内容跟你说的，好像不矛盾。<br><strong><font color="red">author </font></strong>编程随想</p>
 <p><strong><font color="red">updated </font></strong>2011-05-14T18:28:45.728+08:00<br><strong><font color="red">content </font></strong>补充一下。&lt;br /&gt;&lt;br /&gt;密钥的导出步骤比较多，但操作并不是太困难。&lt;br /&gt;&lt;br /&gt;实际上从Vista开始，一个帐户首次使用EFS加密文件的时候，系统就会用非常醒目的气泡通知，告知用户为什么要备份自己的密钥，并且点击后按照向导就可以用更简单的方式对密钥进行备份。已经简化了不少了<br><strong><font color="red">author </font></strong>Anonymous</p>
-<p><strong><font color="red">updated </font></strong>2011-05-14T18:25:47.045+08:00<br><strong><font color="red">content </font></strong>一直在看博主的文章，挺好的。&lt;br /&gt;&lt;br /&gt;不过今天这篇，有关EFS的介绍有误。EFS是一种基于公钥方式的加密机制，因此实际上只要具备私钥，就可以对相应公钥加密的文件进行解密。&lt;br /&gt;&lt;br /&gt;进而，只要备份好自己的公钥私钥对，重装系统后还原到系统中，一样可以解密之前的文件&lt;br /&gt;&lt;br /&gt;具体方法如下：https://windows.microsoft.com/zh-CN/windows-vista/Back-up-Encrypting-File-System-EFS-certificate<br><strong><font color="red">author </font></strong>Anonymous</p>
+<p><strong><font color="red">updated </font></strong>2011-05-14T18:25:47.045+08:00<br><strong><font color="red">content </font></strong>一直在看博主的文章，挺好的。&lt;br /&gt;&lt;br /&gt;不过今天这篇，有关EFS的介绍有误。EFS是一种基于公钥方式的加密机制，因此实际上只要具备私钥，就可以对相应公钥加密的文件进行解密。&lt;br /&gt;&lt;br /&gt;进而，只要备份好自己的公钥私钥对，重装系统后还原到系统中，一样可以解密之前的文件&lt;br /&gt;&lt;br /&gt;具体方法如下：http://windows.microsoft.com/zh-CN/windows-vista/Back-up-Encrypting-File-System-EFS-certificate<br><strong><font color="red">author </font></strong>Anonymous</p>
 </body>
 </html>
