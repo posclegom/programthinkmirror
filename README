@@ -1,0 +1,45 @@
+to update comments section only:
+
+cd <hosting directory of programthinkmirror>
+cd forum
+./master0.sh
+./master4.sh
+
+
+when programthink adds new blog article:
+
+take full (rolling/long weibo) screenshot of blog article
+save as "<you pick name>.png"
+open "short.html" under original "blog" folder of BT Sync
+replace <title> with title of new blog article
+replace <h1> with title of new blog article
+replace <img src> with "<you pick name>.png"
+save "short.html" into target year, month and the html name of new blog article
+run midnight commander
+left pane: displays original "blog" folder of BT Sync
+right pane: displays cd <hosting directory of programthinkmirror>
+in right pane delete all year-number folders
+copy all year-number folders from left pane to right pane, one by one, with recursive copy
+exit midnight commander
+cd <hosting directory of programthinkmirror>
+edit src/mlist/mlist
+add in url of new blog article at top
+edit src/nlist/nlist
+add in Blogger RSS feed number of new blog article at top
+cd forum
+./master0.sh
+./master4.sh
+cd ..
+./master1.sh
+./master3.sh
+edit index.html and add in new entry for new blog article
+
+
+when programthink updates BT Sync blog folder
+delete everything from <hosting directory of programthinkmirror> EXCEPT src/ forum/ and the files in ./
+use midnight commander to copy everything from updated "blog" folder of BT Sync to <hosting directory of programthinkmirror>
+cd <hosting directory of programthinkmirror>
+./master1.sh
+./master3.sh
+./intern2 < index.html > out
+./secure < out > index.html
