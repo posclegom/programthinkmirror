@@ -14,7 +14,7 @@ open "short.html" under original "blog" folder of BT Sync
 replace <title> with title of new blog article
 replace <h1> with title of new blog article
 replace <img src> with "<you pick name>.png"
-save "short.html" into target year, month and the html name of new blog article
+save "short.html" into target year, month and the html name of new blog article into original "blog" folder of BT Sync
 run midnight commander
 left pane: displays original "blog" folder of BT Sync
 right pane: displays cd <hosting directory of programthinkmirror>
@@ -24,9 +24,13 @@ exit midnight commander
 cd <hosting directory of programthinkmirror>
 edit src/mlist/mlist
 add in url of new blog article at top
+cp src/mlist/mlist .
+(you may alternatively perform a wc -l check to ensure number of lines matches current # of blog articles on programthink)
 edit src/nlist/nlist
 add in Blogger RSS feed number of new blog article at top
 cd forum
+cp ../src/nlist/nlist .
+(you may alternatively perform a wc -l check to ensure number of lines matches current # of blog articles on programthink)
 ./master0.sh
 ./master4.sh
 cd ..
@@ -35,7 +39,8 @@ cd ..
 edit index.html and add in new entry for new blog article
 
 
-when programthink updates BT Sync blog folder
+when programthink updates BT Sync blog folder:
+
 delete everything from <hosting directory of programthinkmirror> EXCEPT src/ forum/ and the files in ./
 use midnight commander to copy everything from updated "blog" folder of BT Sync to <hosting directory of programthinkmirror>
 cd <hosting directory of programthinkmirror>
@@ -43,3 +48,14 @@ cd <hosting directory of programthinkmirror>
 ./master3.sh
 ./intern2 < index.html > out
 ./secure < out > index.html
+(other manual cosmetic changes are applied to index.html at your discretion, please refer to index.html in this repository)
+
+an additional note on src/:
+
+the src/ contains both production and historical/deprecated codes,
+folders containing production codes are:
+pt7/
+pt8/
+pt10/
+pt11/
+pt12/
