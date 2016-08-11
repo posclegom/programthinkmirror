@@ -50,6 +50,7 @@ cd <hosting directory of programthinkmirror>
 ./secure < out > index.html
 (other manual cosmetic changes are applied to index.html at your discretion, please refer to index.html in this repository)
 
+
 an additional note on src/:
 
 the src/ contains both production and historical/deprecated codes,
