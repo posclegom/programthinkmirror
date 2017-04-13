@@ -1,11 +1,15 @@
 to update comments section only:
 
 cd <hosting directory of programthinkmirror>
-cd forum
+cd forum2
 ./master0.sh
 ./master4.sh
+./master6.sh
+./master4.sh
+./master8.sh
+./master4.sh
 
-
+<--THE FOLLOWING IS DEPRECATED!!!
 when programthink adds new blog article:
 
 take full (rolling/long weibo) screenshot of blog article
@@ -37,7 +41,7 @@ cd ..
 ./master1.sh
 ./master3.sh
 edit index.html and add in new entry for new blog article
-
+END OF DEPRECATED SECTION!!! -->
 
 when programthink updates BT Sync blog folder:
 
@@ -45,7 +49,7 @@ delete everything from <hosting directory of programthinkmirror> EXCEPT src/ for
 use midnight commander to copy everything from updated "blog" folder of BT Sync to <hosting directory of programthinkmirror>
 cd <hosting directory of programthinkmirror>
 ./master1.sh
-./master3.sh
+./master7.sh
 ./intern2 < index.html > out
 ./secure < out > index.html
 (other manual cosmetic changes are applied to index.html at your discretion, please refer to index.html in this repository)
@@ -55,8 +59,8 @@ an additional note on src/:
 
 the src/ contains both production and historical/deprecated codes,
 folders containing production codes are:
-pt7/
 pt8/
 pt10/
-pt11/
 pt12/
+pt13/
+pt14/

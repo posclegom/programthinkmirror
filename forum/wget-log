@@ -1,0 +1,19 @@
+--2017-01-27 04:28:59--  https://program-think.blogspot.com/feeds/3561851376326365854/comments/default?max-results=999&start-index=500
+Resolving program-think.blogspot.com (program-think.blogspot.com)... 172.217.5.65, 2607:f8b0:4007:80c::2001
+Connecting to program-think.blogspot.com (program-think.blogspot.com)|172.217.5.65|:443... failed: Connection timed out.
+Connecting to program-think.blogspot.com (program-think.blogspot.com)|2607:f8b0:4007:80c::2001|:443... failed: Connection timed out.
+Retrying.
+
+--2017-01-27 04:31:06--  (try: 2)  https://program-think.blogspot.com/feeds/3561851376326365854/comments/default?max-results=999&start-index=500
+Connecting to program-think.blogspot.com (program-think.blogspot.com)|172.217.5.65|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [application/atom+xml]
+Saving to: '68b.xml'
+
+     0K .                                                      27.3M=0s
+
+2017-01-27 04:31:06 (27.3 MB/s) - '68b.xml' saved [1610]
+
+FINISHED --2017-01-27 04:31:06--
+Total wall clock time: 2m 7s
+Downloaded: 1 files, 1.6K in 0s (27.3 MB/s)
