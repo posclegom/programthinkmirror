@@ -1,9 +1,9 @@
 #!/bin/bash
 
+i=0
 j=b.html
-for i in `seq 0 19`;
-do
- read p;
+
+while read p; do
  echo $i$j
  if [ -e $i$j ]
  then
@@ -15,4 +15,5 @@ do
    ./pull4 $i $p
   fi
  fi
+ ((i++))
 done < nlist

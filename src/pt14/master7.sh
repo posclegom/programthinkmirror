@@ -2,6 +2,7 @@
 
 i=0
 j=b.html
+l=c.html
 k="forum2/"
 
 while read p; do
@@ -14,6 +15,13 @@ while read p; do
   echo EXISTS!
   echo $k$i$j
   ./link2b $i < .$p > out
+  cp out .$p
+ fi
+ if [ -e $k$i$l ]
+ then
+  echo EXISTS C!
+  echo $k$i$l
+  ./link2c $i < .$p > out
   cp out .$p
  fi
  ((i++))

@@ -1,9 +1,9 @@
 #!/bin/bash
 
+i=0
 j=a.html
-for i in `seq 0 19`;
-do
- read p;
+
+while read p; do
  echo $i$j
  n=$( grep updated $i$j | wc -l )
  echo $n
@@ -12,4 +12,5 @@ do
   echo Yes.
   ./pull3 $i $p
  fi
+ ((i++))
 done < nlist
