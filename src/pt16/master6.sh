@@ -11,11 +11,11 @@ while read p; do
  then
   echo Yes.
   a="wget --no-check-certificate -O"
-  b="b.xml 'https://program-think.blogspot.com/feeds/"
-  c="/comments/default?max-results=999&start-index=500'"
+  b="b.xml https://program-think.blogspot.com/feeds/"
+  c="/comments/default?max-results=999&start-index=500"
   d="$a $i$b$p$c"
   echo $d
-  eval $d
+  $d
  fi
  ((i++))
 done < nlist

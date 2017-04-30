@@ -13,11 +13,11 @@ while read p; do
  then
   echo Yes.
   a="wget --no-check-certificate -O"
-  b="c.xml 'https://program-think.blogspot.com/feeds/"
-  c="/comments/default?max-results=999&start-index=1000'"
+  b="c.xml https://program-think.blogspot.com/feeds/"
+  c="/comments/default?max-results=999&start-index=1000"
   d="$a $i$b$p$c"
   echo $d
-  eval $d
+  $d
  fi
  fi
  ((i++))

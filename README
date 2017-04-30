@@ -1,7 +1,7 @@
 to update comments section only:
 
 cd <hosting directory of programthinkmirror>
-cd forum2
+cd forum3
 ./master0.sh
 ./master4.sh
 ./master6.sh
@@ -44,8 +44,12 @@ edit index.html and add in new entry for new blog article
 END OF DEPRECATED SECTION!!! -->
 
 when programthink updates BT Sync blog folder:
-
-delete everything from <hosting directory of programthinkmirror> EXCEPT src/ forum/ and the files in ./
+update src/mlist/mlist
+update src/nlist/nlist
+cp src/mlist/mlist .
+cp src/nlist/nlist forum3/
+update forum as per start of this README
+delete everything from <hosting directory of programthinkmirror> EXCEPT src/ forum3/ and the files in ./
 use midnight commander to copy everything from updated "blog" folder of BT Sync to <hosting directory of programthinkmirror>
 cd <hosting directory of programthinkmirror>
 ./master1.sh

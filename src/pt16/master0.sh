@@ -10,6 +10,6 @@ while read p; do
  c="/comments/default?max-results=999"
  d="$a $i$b$p$c"
  echo $d
- eval $d
+ $d
  ((i++))
 done < nlist 
