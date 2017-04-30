@@ -50,8 +50,7 @@ use midnight commander to copy everything from updated "blog" folder of BT Sync 
 cd <hosting directory of programthinkmirror>
 ./master1.sh
 ./master7.sh
-./intern2 < index.html > out
-./secure < out > index.html
+sed -i -e 's/http:/https:/g' index.html
 (other manual cosmetic changes are applied to index.html at your discretion, please refer to index.html in this repository)
 
 
@@ -59,8 +58,7 @@ an additional note on src/:
 
 the src/ contains both production and historical/deprecated codes,
 folders containing production codes are:
-pt8/
 pt10/
-pt12/
-pt13/
-pt14/
+pt16/
+pt18/
+pt19/
