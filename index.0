@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN">
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="zh-CN">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Python script by program.think@gmail.com" />
@@ -13,7 +13,7 @@
 <div id="content-wrapper">
 
 <div id="main" style="width:67%;">
-<h1><a href="http://program-think.blogspot.com/" title="跳转到俺的博客">编程随想的博客</a></h1>
+<h1><a href="https://program-think.blogspot.com/" title="跳转到俺的博客">编程随想的博客</a></h1>
 <hr>
 <div class="post">
 <h2><font color = red>由于本镜像网站所提供的内容皆为静态HTML，所以浏览器的内置缓冲cache可能导致你看不到最新的更新，请【务必】使用浏览器提供的Private/Anonymous/Incognito模式进行【无cache】浏览！</font></h2>
@@ -43,7 +43,7 @@
 <div class="widget-content">
 <img src="images/thinker.jpg" alt="编程随想的Logo" title="编程随想的Logo"><br>
 <br>
-<img src="images/favicon/blogspot.ico" height="16" width="16"><a href="http://program-think.blogspot.com/" target="_blank" title="博客主站点 (BlogSpot)">博客主站点 (BlogSpot)</a><br>
+<img src="images/favicon/blogspot.ico" height="16" width="16"><a href="https://program-think.blogspot.com/" target="_blank" title="博客主站点 (BlogSpot)">博客主站点 (BlogSpot)</a><br>
 <img src="images/favicon/gmail.ico" height="16" width="16"><a href="mailto:program.think@gmail.com" target="_blank" title="俺的邮箱 (Gmail)">俺的邮箱 (Gmail)</a><br>
 <img src="images/favicon/google-plus.ico" height="16" width="16"><a href="https://plus.google.com/113559088971921339544/posts" target="_blank" title="俺的Google+">俺的Google+</a><br>
 <img src="images/favicon/twitter.ico" height="16" width="16"><a href="https://twitter.com/programthink" target="_blank" title="俺的推特 (@programthink)">俺的推特 (@programthink)</a><br>
@@ -54,9 +54,9 @@
 <div class="widget HTML" id="BlogFeed">
 <h2 class="title">订阅博客</h2>
 <div class="widget-content">
-<a href="http://feeds2.feedburner.com/programthink" target="_blank" title="RSS 订阅">
+<a href="https://feeds2.feedburner.com/programthink" target="_blank" title="RSS 订阅">
 <img src="images/feed-icon-animated.gif" alt="RSS 订阅" border="0"></a>　　　
-<a href="http://program-think.blogspot.com/2013/06/email-subscription.html" title="邮件订阅">
+<a href="https://program-think.blogspot.com/2013/06/email-subscription.html" title="邮件订阅">
 <img src="images/email-icon.png" alt="邮件订阅" border="0"></a><br>
 </div>
 </div>
