@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mv newww olddd
+rm neww
 wget --no-check-certificate -O 2017.html https://program-think.blogspot.com/2017/
 wget --no-check-certificate -O 2016.html https://program-think.blogspot.com/2016/
 wget --no-check-certificate -O 2015.html https://program-think.blogspot.com/2015/
