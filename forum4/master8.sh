@@ -4,7 +4,7 @@ i=0
 while read p; do
  read q <&3
  read r <&4
- if [ "$q" -gt "$r" ]
+ if [ "$q" -ne "$r" ]
  then
  if [ "$q" -gt 1000 ]
  then

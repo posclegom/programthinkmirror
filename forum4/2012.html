@@ -408,7 +408,7 @@ ga('send', 'pageview');
 <script src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js' type='text/javascript'></script>
 <link href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/start/jquery-ui.min.css' rel='stylesheet'/>
 <script src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js' type='text/javascript'></script>
-<link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=5235590154125226279&amp;zx=e6e82fef-df63-449a-ba54-a6804e76f502' rel='stylesheet'/>
+<link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=5235590154125226279&amp;zx=c70915d1-8d7a-4a09-b0c9-43c56ad75d18' rel='stylesheet'/>
 </head>
 <body>
 <div id='outer-wrapper'><div id='wrap2'>
@@ -5790,7 +5790,7 @@ ga('send', 'pageview');
 2012年1月26日
 </span>
 <span class='post-comment-link'>
-<a class='comment-link' href='https://program-think.blogspot.com/2012/01/stockdale-paradox.html#comments'>36
+<a class='comment-link' href='https://program-think.blogspot.com/2012/01/stockdale-paradox.html#comments'>38
 评论</a>
 </span>
 <span class='post-labels'>
@@ -6067,10 +6067,7 @@ function reportError(sDesc, sUrl, nLineNo)
     }
 
     sDesc = sDesc.replace(/^\s+|\s+$/g, "");
-    if(!sDesc || $dbg_info.val().indexOf(sDesc) >= 0)
-    {
-      return;
-    }
+    if(!sDesc || $dbg_info.val().indexOf(sDesc) >= 0) { return }
     (sUrl && location.href.indexOf(sUrl)>=0) && (sUrl = null);
 
     $dbg_info.val(
@@ -6131,22 +6128,11 @@ function parseBrowserType(sUserAgent)
 {
   sUserAgent = sUserAgent || window.navigator.userAgent;
 
-  if(sUserAgent.toLowerCase().indexOf("firefox") >= 0)
-  {
-    return "Firefox";
-  }
-  if(sUserAgent.toLowerCase().indexOf("chrome") >= 0)
-  {
-    return "Chrome";
-  }
-  if(sUserAgent.toLowerCase().indexOf("safari") >= 0)  // MUST after chrome
-  {
-    return "Safari";
-  }
-  if(sUserAgent.toLowerCase().indexOf("opera") >= 0)
-  {
-    return "Opera";
-  }
+  if(sUserAgent.toLowerCase().indexOf("firefox") >= 0) { return "Firefox" }
+  if(sUserAgent.toLowerCase().indexOf("chrome") >= 0) { return "Chrome" }
+  if(sUserAgent.toLowerCase().indexOf("safari") >= 0) { return "Safari" }  // MUST after chrome
+  if(sUserAgent.toLowerCase().indexOf("opera") >= 0) { return "Opera" }
+
   if(sUserAgent.indexOf("Trident") > 0)
   {
     var sVer = "", sEngineVer = "", results = null;
@@ -6172,23 +6158,6 @@ function parseBrowserType(sUserAgent)
 
   return "unknown";
 }  // parseBrowserType() end
-
-
-// Number converter
-
-function intToStr(nInput, nWidth, sPrefix)
-{
-  assert(nInput >= 0, "intToStr: Invalid input number!");
-  assert(nWidth > 0, "intToStr: Invalid width!");
-  assert(sPrefix && sPrefix.length>0, "intToStr: Invalid prefix!");
-
-  var sText = String(nInput);
-  while(sText.length < nWidth)
-  {
-    sText = sPrefix + sText;
-  }
-  return sText;
-}
 
 
 // Object class
@@ -6220,11 +6189,8 @@ if(!Object.keys)  // For browser compatibility
            assert(false, "Object.keys: Invalid 'obj'!");
          }
 
-         var result = [], prop;
-         for(prop in obj)
-         {
-           hasOwnProperty.call(obj, prop) && result.push(prop);
-         }
+         var result = [], prop = null;
+         for(prop in obj) { hasOwnProperty.call(obj, prop) && result.push(prop) }
 
          if(hasDontEnumBug)
          {
@@ -6237,7 +6203,35 @@ if(!Object.keys)  // For browser compatibility
        };
      }()
     );
-} // Object.keys
+} // Object.keys() end
+
+
+// Number class
+
+if(!Number.isInteger)  // For browser compatibility
+{
+  Number.isInteger = function(value)
+  {
+    return typeof value==="number" && isFinite(value) && Math.floor(value)===value;
+  };
+}
+
+Number.cmp = function(a, b)
+{
+  assert(typeof a==="number" && typeof b==="number", "Number.cmpInSort: Invalid type!");
+  return a==b ? 0 : (a>b ? 1 : -1);
+}
+
+function intToStr(nInput, nWidth, sPrefix)
+{
+  assert(typeof nInput === "number", "intToStr: Invalid 'nInput' type!");
+  assert(nInput >= 0, "intToStr: Invalid 'nInput' value!");
+  assert(nWidth > 0, "intToStr: Invalid 'nWidth'!");
+  assert(sPrefix && sPrefix.length>0, "intToStr: Invalid 'sPrefix'!");
+  var sText = String(nInput);
+  while(sText.length < nWidth) { sText = sPrefix+sText }
+  return sText;
+}
 
 
 // String class
@@ -6253,20 +6247,32 @@ if(!String.prototype.startsWith)  // For browser compatibility
 
 if(!String.prototype.trim)  // For browser compatibility
 {
-  String.prototype.trim = function()
-  {
-    return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-  };
+  String.prototype.trim = function(){ return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "") }
 }
 
-String.prototype.multiReplace = function(arrSyntax)  // inner helper
+String.prototype.multiReplace = function(arrSyntax)  // helper
 {
   assert(Array.isArray(arrSyntax), "String.multiReplace: Invalid 'arrSyntax'!");
-
   var sRtn = this;
   $.each(arrSyntax, function(i, syntax){ sRtn = sRtn.replace(syntax[0], syntax[1]) });
   return sRtn;
 };
+
+String.isGBKChar = function(nCode)
+{
+  return 0x4E00<=nCode && nCode<=0x9FFF;
+}
+
+String.prototype.mergeGBK = function()
+{
+  var sProc = "";
+  for(var i=0; i<this.length; i++)
+  {
+    var ch = this.charAt(i);
+    sProc.indexOf(ch)==-1 && String.isGBKChar(this.charCodeAt(i)) && (sProc += ch);
+  }
+  return sProc;
+}
 
 String.prototype.htmlDecode = function()  // HTML helper
 {
@@ -6289,6 +6295,7 @@ String.prototype.htmlEncode = function()  // HTML helper
     [/>/g, "&gt;"],
     [/"/g, "&quot;"],
     [/'/g, "&#39;"],
+    [/\t/g, "&nbsp;&nbsp;"],
     [/ /g, "&nbsp;"]
   ];
   return this.multiReplace(arrCharMap);
@@ -6301,18 +6308,99 @@ String.prototype.htmlTrimTag = function()  // HTML helper
 };
 
 
+// StrInfo class
+
+function StrInfo(sText)
+{
+  sText = trimNoise(sText);
+  this.nRawLen = sText.length;
+  this.arrChars = [];
+  this.mapCounter = {};
+
+  for(var i=0; i<sText.length; i++)
+  {
+    var ch = sText.charAt(i);
+    if(ch in this.mapCounter)
+    {
+      this.mapCounter[ch] += 1;
+    }
+    else
+    {
+      this.mapCounter[ch] = 1;
+      this.arrChars.push(ch);
+    }
+  }
+  var mapCounter = this.mapCounter;
+  this.arrChars.sort(function(a, b){ return Number.cmp(mapCounter[a], mapCounter[b]) * -1 });
+
+  function trimNoise(sText)
+  {
+    //(sText.length > 1024) && (sText = sText.substr(0, 1024));
+    var arrLines = sText.split("\n"), mapLines = {};
+    sText = "";
+
+    var arrSyntax =
+    [
+      [new RegExp(Url.getRegexpStr(), "g"), "  "],  // url
+      [/[\s\,\.\?!\\:;"'\-\(\)\{\}&#12288;&#65292;&#12290;&#65311;&#65281;&#12289;&#65306;&#65307;&#8220;&#8221;&#8216;&#8217;&#8212;&#8212;&#65288;&#65289;&#12304;&#12305;的]+/g, "  "],  // punct, must AFTER url
+      [/\[\/?\w+\]|\[(?:URL|IMG)=[^\]]*\]/gi, "  "],  // bbcode tag, must AFTER url
+      [/(?:\s|^)[a-f0-9]{8,}(?:\s|$)/gi, "  "],  // hex string
+      [/(?:\s|^)[a-z]{1,2}(?:\s|$)/gi, "  "],  // too short letters, must AFTER url
+      [/^\s+|\s+$/g, ""],  // String.trim()
+      [/\s{2,}/g, " "]  // merge space, must AT LAST
+    ];
+    for(var i=0; i<arrLines.length; i++)
+    {
+      var sLine = arrLines[i].multiReplace(arrSyntax);
+      if(!sLine || sLine in mapLines) { continue }
+      sText += (0==i ? "" : " ") + sLine;
+      mapLines[sLine] = 1;
+    }
+    return sText;
+  }
+}  // StrInfo() end
+
+StrInfo.prototype.isSimilarity = function(infoOther, nCritical)
+{
+  var siShort = this, siLong = infoOther;
+  if(this.arrChars.length > infoOther.arrChars.length)
+  {
+    siLong = this;
+    siShort = infoOther;
+  }
+  if(siLong.arrChars.length/siShort.arrChars.length > 2.0) { return false }
+
+  nCritical *= (this.nRawLen + infoOther.nRawLen);
+  var nCount = 0;
+  var nRatio = 10, nCheckPos = Math.floor(siShort.arrChars.length/nRatio);
+  for(var i=0; i<siShort.arrChars.length; i++)
+  {
+    if(nCheckPos>=1 && nCheckPos==i && nCount<nCritical/nRatio) { return false }
+
+    var ch = siShort.arrChars[i];
+    if(ch in siLong.mapCounter)
+    {
+      nCount += siShort.mapCounter[ch]+siLong.mapCounter[ch];
+      if(nCount > nCritical) { return true }
+    }
+  }
+  return false;
+}  // isSimilarity() end
+
+
 // Array class
+
+Array.prototype.insert = function(nIndex, item)  // helper
+{
+  this.splice(nIndex, 0, item);
+}
 
 Array.prototype.delayFor = function(nTimeSpan, fnProc, fnComplete)
 {
-  if(isNaN(nTimeSpan))  // TODO
-  {
-    return;
-  }
+  if(isNaN(nTimeSpan)) { return }  // TODO
   // assert(!isNaN(nTimeSpan) && nTimeSpan>0,
   //        "Array.delayFor: Invalid 'nTimeSpan': '" + nTimeSpan + "'");
-  assert(nTimeSpan <= 1000,
-         "Array.delayFor: The 'nTimeSpan' too large: '" + nTimeSpan + "'");
+  assert(nTimeSpan <= 1000, "Array.delayFor: The 'nTimeSpan' too large: '" + nTimeSpan + "'");
   assert(fnProc, "Array.delayFor: The 'fnProc' is NULL!");
 
   var self = this, nCur = 0;
@@ -6359,30 +6447,21 @@ Date.parseISO = function(str)  // For browser compatibility
      11 = offset hours
      12 = offset minutes (with colon) */
   var reISO = /^(\d{4})-(\d\d)-(\d\d)(T(\d\d):(\d\d):(\d\d)(\.\d{1,3})?(Z|([+-])(\d\d)(:\d\d)?)?)?$/;
-  var sErr = "Date.parseISO: Invalid ";
   var results = reISO.exec(str);
-  if(!results)
-  {
-    return null;
-  }
+  if(!results) { return null }
+  var sErr = "Date.parseISO: Invalid ";
 
   var nYear = Number(results[1]), nMonth = Number(results[2])-1, nDate = Number(results[3]);
   assert(0<=nMonth && nMonth<12, sErr + "month:" + nMonth);
   assert(1<=nDate && nDate<=31, sErr + "date:" + nDate);
-  if(!results[4])
-  {
-    return new Date(Date.UTC(nYear, nMonth, nDate));
-  }
+  if(!results[4]) { return new Date(Date.UTC(nYear, nMonth, nDate)) }
 
   var nHour = Number(results[5]), nMinute = Number(results[6]), nSecond = Number(results[7]);
   assert(0<=nHour && nHour<24, sErr + "hour:" + nHour);
   assert(0<=nMinute && nMinute<60, sErr + "minute:" + nMinute);
   assert(0<=nSecond && nSecond<=60, sErr + "second:" + nSecond);
   var nMilliSecond = results[8] ? Number((results[8]+"000").substr(1,3)) : 0;
-  if(!results[9])
-  {
-    return new Date(nYear, nMonth, nDate, nHour, nMinute, nSecond, nMilliSecond);
-  }
+  if(!results[9]) { return new Date(nYear, nMonth, nDate, nHour, nMinute, nSecond, nMilliSecond) }
 
   results[11] && (nHour -= Number(results[10] + results[11]));
   results[12] && (nMinute -= Number(results[10] + results[12].substr(1)));
@@ -6476,10 +6555,7 @@ function Url(sUrl)
   }
   function parseQueryString(sQueryString)
   {
-    if(!sQueryString)
-    {
-      return {};
-    }
+    if(!sQueryString) { return {} }
 
     assert(sQueryString.charAt(0)=="?", "parseQueryString");
     var mapParams = {}, arrParams = sQueryString.substr(1).split("&");
@@ -6489,14 +6565,8 @@ function Url(sUrl)
       if(results && 3==results.length)
       {
         var sName = results[1], sValue = results[2].replace(/\+/g, "%20");
-        try
-        {
-          mapParams[sName] = decodeURIComponent(sValue);
-        }
-        catch(err)
-        {
-          mapParams[sName] = "";  // TODO
-        }
+        try { mapParams[sName] = decodeURIComponent(sValue) }
+        catch(err) { mapParams[sName] = "" }  // TODO
       }
     }
     return mapParams;
@@ -6550,10 +6620,7 @@ Radix64 =  // Can NOT handle negative numbers and float number.
     {
       sResult = this._sRixits.charAt(nNum % 64) + sResult;
       nNum = Math.floor(nNum / 64);
-      if(0 == nNum)
-      {
-        break;
-      }
+      if(0 == nNum) { break }
     }
     return sResult;
   },
@@ -6633,7 +6700,6 @@ function getDatePickerOpts()
 function getRelativeTimeDesc(dt)
 {
   var nMinutes = Math.round( (getCurrentMS()-dt.getTime()) / 1000 / 60 );
-
   if(nMinutes < 10) { return "刚才" }
   else if(nMinutes < 20) { return "10分钟前" }
   else if(nMinutes < 30) { return "20分钟前" }
@@ -6648,31 +6714,18 @@ function getRelativeTimeDesc(dt)
 
 function renderBBCode(sText, mapOpts)
 {
-  assert((sText.indexOf("<") == -1) && (sText.indexOf(">") == -1),
-         "renderBBCode: Invalid char!");
+  assert((sText.indexOf("<") == -1) && (sText.indexOf(">") == -1), "renderBBCode: Invalid char: '<>'");
   mapOpts = mapOpts || {};  // reserved
 
-  function escape(str)
+  function escape(str)  // reserved
   {
-    var arrCharMap =
-    [
-      [/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;"]
-      //[/ /g, "&nbsp;"]
-    ];
-    for(var i=0; i<arrCharMap.length; i++)
-    {
-      str = str.replace(arrCharMap[i][0], arrCharMap[i][1]);
-    }
     return str;
   }
 
   function forceHTTPS(sUrl)
   {
     var oUrl = new Url(sUrl);
-    if("https" == oUrl.sProtocol)
-    {
-      return sUrl;
-    }
+    if("https" == oUrl.sProtocol) { return sUrl }
 
     var arrHosts =  // famous domains that support HTTPS
     [
@@ -6683,10 +6736,7 @@ function renderBBCode(sText, mapOpts)
     ];
     for(var i=0; i<arrHosts.length; i++)
     {
-      if(oUrl.sHost.match(arrHosts[i]))
-      {
-        return sUrl.replace(/^http:/i, "https:");
-      }
+      if(oUrl.sHost.match(arrHosts[i])) { return sUrl.replace(/^http:/i, "https:") }
     }
     return sUrl;
   }  // forceHTTPS() end
@@ -6710,8 +6760,7 @@ function renderBBCode(sText, mapOpts)
     {
       assert(s1 in mapTips, "renderBBCode.addTip: Invalid type!");
       var sTip = mapTips[s1];
-      assert(sTip.indexOf("'") == -1,
-             "renderBBCode.addTip: The 'mapTips' had invalid char!");
+      assert(sTip.indexOf("'") == -1, "renderBBCode.addTip: Invalid char in 'mapTips'!");
       return  " title='&#12304;BBCode 语法提示&#12305;\n" + sTip + "'";
     }
     return sText.replace(/\stitle=(?:'|")([\w\.]+)(?:'|")/g, makeNewStr);
@@ -6733,15 +6782,9 @@ function renderBBCode(sText, mapOpts)
     ];
     for(var i=0; i<arrImgHosts.length; i++)
     {
-      if(sUrl.match(arrImgHosts[i][0]))
-      {
-        return arrImgHosts[i][1];
-      }
+      if(sUrl.match(arrImgHosts[i][0])) { return arrImgHosts[i][1] }
     }
-    if(sUrl.match(/\.(?:jpe?g|png|gif|svg)$/i))
-    {
-      return "N/A";
-    }
+    if(sUrl.match(/\.(?:jpe?g|png|gif|svg)$/i)) { return "N/A" }
     return null;
   }
 
@@ -6871,27 +6914,18 @@ Cookie.prototype.isExisted = function()
 Cookie.prototype.load = function()
 {
   var results = document.cookie.match(this.regex);
-  if(!results || results.length!=2)
-  {
-    return null;
-  }
+  if(!results || results.length!=2) { return null }
   return decodeURIComponent(results[1]);
 }
 
 Cookie.prototype.save = function(sValue, nExpireDays)
 {
-  if(isNaN(nExpireDays) || nExpireDays<=0)
-  {
-    nExpireDays = Cookie.getExpireDays();
-  }
-
+  if(isNaN(nExpireDays) || nExpireDays<=0) { nExpireDays = Cookie.getExpireDays() }
   var sCookie = this.sName + "=" + encodeURIComponent(sValue);
-
   var dt = new Date();
   dt.setTime(dt.getTime() + nExpireDays*24*60*60*1000);
   sCookie += ";expires="+dt.toUTCString();
   sCookie += ";path=/";
-
   document.cookie = sCookie;
   return this.isExisted();
 }
@@ -6913,10 +6947,7 @@ Cookie.prototype.saveInt = function(nNum, nExpireDays)
 Cookie.prototype.loadMap = function()
 {
   var sMap = this.load();
-  if(!sMap)
-  {
-    return {};
-  }
+  if(!sMap) { return {} }
 
   var arrPairs = sMap.split(")");
   var map = {};
@@ -6935,16 +6966,9 @@ Cookie.prototype.loadMap = function()
 
 Cookie.prototype.saveMap = function(map, nExpireDays)
 {
-  if(!map)
-  {
-    return false;
-  }
-
+  if(!map) { return false }
   var sMap = "";
-  for(var sKey in map)
-  {
-    sMap += sKey+"("+map[sKey]+")";
-  }
+  for(var sKey in map) { sMap += sKey+"("+map[sKey]+")" }
   return this.save(sMap, nExpireDays);
 }
 
@@ -6965,12 +6989,9 @@ function loadConfig()
     "comments.font-size" : "100",
     "comments.bbcode-img" : "auto",  // unused
     "comments.limit-height" : "true",
-    "comments.unread" : "false",
-    "comments.unread-auto-filter" : "true",
-    "comments.unread-highlight" : "true",
 
     "tweets.font-size" : "100",
-    "tweets.init-num" : "50",
+    "tweets.init-num" : "120",
     "tweets.auto-load" : "true",
     "tweets.auto-load-timeout" : "5",
 
@@ -6980,17 +7001,11 @@ function loadConfig()
   };
 
   var mapConfig = (new Cookie("options")).loadMap();
-  if(!mapConfig)
-  {
-    return mapDefaultConfig;
-  }
+  if(!mapConfig) { return mapDefaultConfig }
 
   for(var sKey in mapDefaultConfig)
   {
-    if(!(sKey in mapConfig))
-    {
-      mapConfig[sKey] = mapDefaultConfig[sKey];
-    }
+    if(!(sKey in mapConfig)) { mapConfig[sKey] = mapDefaultConfig[sKey] }
   }
 
   return mapConfig;
@@ -7024,25 +7039,17 @@ jQuery.fn.extend({
 
   scrollTo: function(sScrollType)
   {
-    jQuery("html,body").animate(
-      { scrollTop: this.offset().top },
-      sScrollType
-    );
+    jQuery("html,body").animate({ scrollTop: this.offset().top }, sScrollType);
     return this;
   },
 
   adjustPosition: function(offset)
   {
-    var x = offset.left;
-    var y = offset.top;
-    x = (x < 0) ? 0 : x;
-    y = (y < 0) ? 0 : y;
-
-    ( x > jQuery(window).width() - this.width() )
-      && ( x = jQuery(window).width() - this.width() );
-    ( y > jQuery(window).height() - this.height() )
-      && ( y = jQuery(window).height() - this.height() );
-
+    var x = offset.left, y = offset.top;
+    x = (x<0) ? 0 : x;
+    y = (y<0) ? 0 : y;
+    ( x > jQuery(window).width()-this.width() ) && ( x = jQuery(window).width()-this.width() );
+    ( y > jQuery(window).height()-this.height() ) && ( y = jQuery(window).height()-this.height() );
     this.css({ left:x, top:y });
     return { left:x, top:y };
   },
@@ -7055,7 +7062,7 @@ jQuery.fn.extend({
 
     this.get().delayFor(
       nTimeSpan,
-      function(n, item) { fnProc(jQuery(item)) },
+      function(n, item){ fnProc(jQuery(item)) },
       fnComplete
     );
   },
@@ -7063,14 +7070,7 @@ jQuery.fn.extend({
   doClick: function()
   {
     var offset = this.offset();
-    var event = jQuery.Event(
-      "mousedown",
-      {
-        which: 1,
-        pageX: offset.left,
-        pageY: offset.top
-      }
-    );
+    var event = jQuery.Event("mousedown", { which:1, pageX:offset.left, pageY:offset.top });
     this.trigger(event);
     return this;
   }
@@ -7081,16 +7081,11 @@ jQuery.fn.extend({
 
 Tooltip =
 {
-  content : function(callback)
-  {
-    callback( $(this).attr("title").replace(/\n/g, "<br/>") );
-  },
-
+  content : function(callback){ callback($(this).attr("title").replace(/\n/g, "<br/>")) },
   open: function(event, ui, nTimeout)
   {
     ui.tooltip.hover(function(){ $(this).hide("fade") });
-    !isNaN(nTimeout) && nTimeout>0
-      && delayRun(function(){ ui.tooltip.hide("fade") }, nTimeout);
+    !isNaN(nTimeout) && nTimeout>0 && delayRun(function(){ ui.tooltip.hide("fade") }, nTimeout);
   }
 };
 
@@ -7102,8 +7097,7 @@ function showBottomTip(sText, nTimeout)
   var $element = jQuery("#bottom-tip");
   $element.html(sText).show();
   sText = $element.html();  // Save tip text
-  (nTimeout > 0)
-    && delayRun(function(){ $element.html()==sText && hideBottomTip() }, nTimeout);
+  (nTimeout > 0) && delayRun(function(){ $element.html()==sText && hideBottomTip() }, nTimeout);
 }
 
 function hideBottomTip()
@@ -7129,30 +7123,25 @@ function layoutReset()
 
 function parseSearchKeywords(sParam)
 {
-  if(!sParam)
-  {
-    return [];
-  }
+  if(!sParam) { return [] }
 
   var sValidChar = "\\w\\u4E00-\\u9FFF\\u2000-\\u206F\\u3000-\\u303F\\uFF00-\\uFFEF\\.";
   var reInclude = new RegExp("(?:^|\\s)(?:(["+sValidChar+"]+)|\"(["+sValidChar+"\\s]+)\")(?:\\s|$)", "");
-
   var arrKeywords = [];
+
   while(true)
   {
     var sOld = sParam;
-    sParam = sParam.replace(reInclude,
-                            function(sMatch, s1, s2)
-                            {
-                              s1 && arrKeywords.push(s1);
-                              s2 && arrKeywords.push(s2);
-                              return " ";
-                            }
-                           );
-    if(sParam == sOld)
-    {
-      break;
-    }
+    sParam = sParam.replace(
+      reInclude,
+      function(sMatch, s1, s2)
+      {
+        s1 && arrKeywords.push(s1);
+        s2 && arrKeywords.push(s2);
+        return " ";
+      }
+    );
+    if(sParam == sOld) { break }
   }
 
   return arrKeywords;
@@ -7174,28 +7163,16 @@ function keywordToRegexp(sKeyword)
     [/\?/g, "\\?"],
     [/\s/g, "\\s"]
   ];
-
-  var sRegExp = sKeyword;
-  for(var i=0; i<arrCharMap.length; i++)
-  {
-    sRegExp = sRegExp.replace(arrCharMap[i][0], arrCharMap[i][1]);
-  }
-  return new RegExp(sRegExp, "gi");
+  return new RegExp(sKeyword.multiReplace(arrCharMap), "gi");
 }
 
 function highlightSearchKeywords(arg, arrKeywords)
 {
-  if(!arrKeywords)
-  {
-    return;
-  }
+  if(!arrKeywords) { return }
 
   function funcReplace(sMatch)
   {
-    if(sMatch.search(/\sclass='highlight'/) != -1)
-    {
-      return sMatch;
-    }
+    if(sMatch.search(/\sclass='highlight'/) != -1) { return sMatch }
     return "<span class='highlight'>"+sMatch+"</span>";
   }
 
@@ -7208,7 +7185,7 @@ function highlightSearchKeywords(arg, arrKeywords)
     }
     return sHtml;
   }
-  else if(arg instanceof jQuery)
+  else if(arg instanceof jQuery)  //TODO: NOT used
   {
     var $element = arg;
     var sOldHtml = $element.html();
@@ -7218,48 +7195,28 @@ function highlightSearchKeywords(arg, arrKeywords)
     {
       sNewHtml = sNewHtml.replace(keywordToRegexp(arrKeywords[i]), funcReplace);
     }
-
     (sNewHtml != sOldHtml) && $element.html(sNewHtml);
-    return sNewHtml != sOldHtml ? true : false;
+    return sNewHtml != sOldHtml;
   }
 }  // highlightSearchKeywords() end
 
 function reportHttpError(sOperType, xhr, sErrType)
 {
-  if("notmodified" === sErrType)
-  {
-    return "";
-  }
+  if("notmodified" === sErrType) { return "" }
 
   var sDesc = sOperType+"&#65292;";
-
-  if("timeout" === sErrType)
-  {
-    sDesc += "网络传输超时&#65281;";
-  }
-  else if("parsererror" === sErrType)
-  {
-    sDesc += "无法解析网页数据&#65281;";
-  }
+  if("timeout" === sErrType) { sDesc += "网络传输超时&#65281;" }
+  else if("parsererror" === sErrType) { sDesc += "无法解析网页数据&#65281;" }
   else
   {
-    if(0 == xhr.status)
-    {
-      sDesc += "网络连接异常&#65281;";
-    }
-    else if(400<=xhr.status && xhr.status<600)
-    {
-      sDesc += "Web 服务器返回 HTTP "+xhr.status+" 错误&#65281;";
-    }
-    else
-    {
-      sDesc += "出现未知错误&#65281;";
-    }
+    if(0 == xhr.status) { sDesc += "网络连接异常&#65281;" }
+    else if(400<=xhr.status && xhr.status<600) { sDesc += "Web 服务器返回 HTTP "+xhr.status+" 错误&#65281;" }
+    else { sDesc += "出现未知错误&#65281;" }
   }
 
   showBottomTip("<b>"+sDesc+"</b>", 5000);
   return sDesc;
-}  // reportHttpError() end
+}
 
 
 // Author class
@@ -7269,20 +7226,23 @@ function Author(json)
   this.sName = "";
   this.sHomeUrl = "";
   this.sAvatarUrl = "";
+  this.bIsAnonymous = true;
 
   if(json)
   {
     this.sName = json.name.$t;
     this.sAvatarUrl = json.gd$image.src.replace("http://", "https://");  // Force HTTPS
+    this.bIsAnonymous =
+      (this.sAvatarUrl.match(/\/\/img1\.blogblog\.com\/img\/(?:anon36\.png|blank\.gif)$/i) ? true : false);
     ("uri" in json) && (this.sHomeUrl = json.uri.$t);
   }
+  this.normalize();
 }
 
 Author.prototype.normalize = function()
 {
   // Force HTTPS
-  this.sAvatarUrl.startsWith("//")
-    && (this.sAvatarUrl = "https:"+this.sAvatarUrl);
+  this.sAvatarUrl.startsWith("//") && (this.sAvatarUrl = "https:"+this.sAvatarUrl);
   this.sAvatarUrl.startsWith("http://")
     && (this.sAvatarUrl = this.sAvatarUrl.replace(/^http:/i, "https:"));
   this.sHomeUrl.startsWith("http://www.blogger.com/") && this.isLogined()
@@ -7307,7 +7267,7 @@ Author.prototype.normalize = function()
 
 Author.prototype.isAnonymous = function()
 {
-  return this.sAvatarUrl.match(/\/\/img1\.blogblog\.com\/img\/(?:anon36\.png|blank\.gif)$/i);
+  return this.bIsAnonymous;
 }
 Author.prototype.isLogined = function()
 {
@@ -7315,8 +7275,7 @@ Author.prototype.isLogined = function()
 }
 Author.prototype.isAdmin = function()
 {
-  return this.isLogined()
-    && "https://www.blogger.com/profile/11741356469378252621"==this.sHomeUrl;
+  return this.isLogined() && "https://www.blogger.com/profile/11741356469378252621"==this.sHomeUrl;
 }
 
 Author.prototype.getKey = function()
@@ -7324,11 +7283,9 @@ Author.prototype.getKey = function()
   return this.isAnonymous() ? ("匿名"==this.sName ? "" : this.sName) : this.sHomeUrl;
 }
 
-Author.prototype.isEqual = function(another)
+Author.prototype.isEqual = function(other)
 {
-  return this.isAnonymous()
-    ? this.sName == another.sName
-    : this.sHomeUrl == another.sHomeUrl;
+  return this.isAnonymous() ? this.sName==other.sName : this.sHomeUrl==other.sHomeUrl;
 }
 
 // Author.prototype.show = function()
@@ -7347,7 +7304,9 @@ function Comment(json)
   this.bIsDeleted = false;
   this.bIsBanned = false;  // banned by Google/Blogger
   this.bIsInstruction = false;
+
   this.bIsSpam = false;  // marked by admin
+  this.nTextGroupId = null;  // the size of text group
 
   this.sText = "";
   this.sUrl = "";
@@ -7361,10 +7320,7 @@ function Comment(json)
   this.nSubIndex = null;
 
 
-  if(null == json)
-  {
-    return;
-  }
+  if(null == json) { return }
 
   for(var i=0; i<json.link.length; i++)
   {
@@ -7429,27 +7385,17 @@ function Comment(json)
 Comment.mapArticles = null;
 Comment.initArticlesMap = function(nInitLoadNum)
 {
-  if(null == Comment.mapArticles)
-  {
-    Comment.mapArticles = {};
-  }
-  else
-  {
-    return;
-  }
+  if(null===Comment.mapArticles) { Comment.mapArticles = {} }
+  else { return }
 
   nInitLoadNum = isNaN(nInitLoadNum) ? 8 : nInitLoadNum;
-  var sFeedUrl = Url.getFeedUrlPrefix()
-                + "/posts/summary?alt=json&max-results="+nInitLoadNum;
+  var sFeedUrl = Url.getFeedUrlPrefix()+"/posts/summary?alt=json&max-results="+nInitLoadNum;
   $.ajax({
     url: sFeedUrl,
     dataType: "json",
     success: function(json)
     {
-      if(!("feed" in json) || !("entry" in json.feed))
-      {
-        return;
-      }
+      if(!("feed" in json) || !("entry" in json.feed)) { return }
       for(var n=0; n<json.feed.entry.length; n++)
       {
         var article = json.feed.entry[n];
@@ -7480,13 +7426,22 @@ Comment.prototype.normalize = function()
     return sText.replace(/<\s*br\s*\/?\s*>/gi, "\n")  // keep '<br>' before htmlTrimTag()
       .htmlTrimTag().replace(/</g, "&#65308;").replace(/>/g, "&#65310;")  // for security
       .trim()  // MUST after 'htmlTrimTag()'
+      .replace(/\n{3,}/g, "\n\n")  // anti DOS attack
       .htmlDecode();
   }
   this.sText = (this.bIsDeleted || this.bIsBanned ? "" : procHtml(this.sText));
-  this.oAuthor.isAdmin() && this.sText.match(/^\s*\{\s*"type"\s*\:/)
-    && (this.bIsInstruction = true);
+  this.oAuthor.isAdmin() && this.sText.match(/^\s*\{\s*"type"\s*\:/) && (this.bIsInstruction = true);
 
   return this;
+}
+
+Comment.prototype.isTop = function()
+{
+  return "" == this.sParentLongId;
+}
+Comment.prototype.isSub = function()
+{
+  return "" != this.sParentLongId;
 }
 
 Comment.prototype.truncateComment = function(nMaxLineNum, nColumnWidth)
@@ -7511,42 +7466,64 @@ Comment.prototype.truncateComment = function(nMaxLineNum, nColumnWidth)
   while(true)  // process partial BBCode
   {
     var nTagEnd = this.sText.indexOf("[/", nPos);
-    if(-1 == nTagEnd || this.sText.indexOf("[", nPos) < nTagEnd)
-    {
-      break;
-    }
+    if(-1 == nTagEnd || this.sText.indexOf("[", nPos) < nTagEnd) { break }
     nTagEnd = this.sText.indexOf("]", nTagEnd+2);
-    if(-1 == nTagEnd)
-    {
-      break;
-    }
+    if(-1 == nTagEnd) { break }
     nPos = nTagEnd+1;
   }
 
   if(this.sText.length - nPos < nColumnWidth*2)
   {
     var results = this.sText.substr(nPos).match(/\n/g);
-    if(!results || results.length<=2)
-    {
-      return this.sText;  // similar height, NOT need truncate
-    }
+    if(!results || results.length<=2) { return this.sText }  // similar height, NOT need truncate
   }
-
   return this.sText.substr(0, nPos);
 }  // truncateComment() end
 
 Comment.prototype.showFull = function(mapOpts)
 {
   mapOpts = mapOpts || {};
-  var sSubComments = ("subComments" in mapOpts ? mapOpts.subComments : "");
-  var bVisible = ("visible" in mapOpts ? mapOpts.visible : !this.bIsSpam);
   var nHotValue = ("hotValue" in mapOpts ? mapOpts.hotValue : null);
   var sHotTitle = ("hotTitle" in mapOpts ? mapOpts.hotTitle : "");
   var sStarList = ("starList" in mapOpts ? mapOpts.starList : "");
   var nMaxAuthorLen = ("maxAuthorLen" in mapOpts ? mapOpts.maxAuthorLen : 30);
+  var bShowSpam = ("showSpam" in mapOpts ? mapOpts.showSpam : false);  // manual show
+  var sSubComments = ("subComments" in mapOpts ? mapOpts.subComments : "");
 
   this.normalize();
 
+  var sContentHtml = getContentHtml(this);
+  function getContentHtml(comment)
+  {
+    if(comment.bIsSpam)
+    {
+      if(!bShowSpam)
+      {
+        return "<span class='restore load " +(comment.isTop() ? "top" : "sub")+ "'>"
+          + "<b>此评论被识别为&#12304;垃圾&#65295;刷屏&#12305;</b>&#12290;<a href='javascript:;'>重新显示</a></span>";
+      }
+    }
+    else if(comment.bIsBanned)
+    {
+      return "<span class='banned-comment'>这个用户的评论被 Google 判定垃圾广告&#65292;所以无法显示 :(<br/>"
+        + "博主会定期清理博客管理界面的&#8220;垃圾评论&#8221;&#65292;如果确认为&#12304;误判&#12305;&#65292;会把这条评论恢复出来&#12290;</span>";
+    }
+    else if(comment.bIsDeleted)
+    {
+      return "<span class='deleted-comment'>这个用户删除了自己的评论 :(</span>";
+    }
+    // normal case
+    var sText = comment.truncateComment(6, 100);  // already call 'htmlDecode()' at 'normalize()'
+    sText = sText.htmlEncode();  // MUST before 'renderBBCode()'
+    var sContentHtml = renderBBCode(sText).replace(/\n/g, "<br/>");
+    (sText.length < comment.sText.length)
+      && (sContentHtml += "<div style='margin:15px 0px;'><hr style='border:1px solid Black;'/>"
+          + "<b>&#65288;此评论太长&#65292;已截断&#65292;<a class='read-more' href='javascript:;'>展开评论全文</a>&#65289;</b></div>");
+    return sContentHtml;
+  }  // getContentHtml() end
+
+  var sClass = (this.sParentLongId ? "sub" : "top") + (this.bIsSpam ? " spam" : "");
+  var nIndex = (this.sParentLongId ? this.nSubIndex : this.nTopIndex);
   var sAuthor = this.oAuthor.sName;
   (sAuthor.length > nMaxAuthorLen) && (sAuthor = sAuthor.substr(0, nMaxAuthorLen)+" ...");
   var sUserClass = (this.oAuthor.isAdmin() ? "blog-author " : "")
@@ -7554,29 +7531,9 @@ Comment.prototype.showFull = function(mapOpts)
   var sDate = (this.dtCreate ? this.dtCreate.format("%Y年%m月%d日") : "");
   var sTime = (this.dtCreate ? this.dtCreate.format("%0H:%0M:%0S") : "");
   var sCounter = this.nTopIndex+"楼" + (this.sParentLongId ? this.nSubIndex+"单元" : "");
-
-  var sContentHtml = "";
-  if(this.bIsBanned)
-  {
-    sContentHtml = "<span class='banned-comment'>这个用户的评论被 Google 判定垃圾广告&#65292;所以无法显示 :(<br/>"
-      + "博主会定期清理博客管理界面的&#8220;垃圾评论&#8221;&#65292;如果确认为&#12304;误判&#12305;&#65292;会把这条评论恢复出来&#12290;</span>";
-  }
-  else if(this.bIsDeleted)
-  {
-    sContentHtml = "<span class='deleted-comment'>这个用户删除了自己的评论 :(</span>";
-  }
-  else
-  {
-    // already call 'htmlDecode()' at 'normalize()'
-    var sText = this.truncateComment(6, 100);
-    sText = sText.htmlEncode();  // MUST before 'renderBBCode()'
-    sContentHtml = renderBBCode(sText).replace(/\n/g, "<br/>");
-    (sText.length < this.sText.length)
-      && (sContentHtml += "<div style='margin:15px 0px;'><hr style='border:1px solid Black;'/>"
-          + "<b>&#65288;此评论太长&#65292;已截断&#65292;<a class='read-more' href='javascript:;'>展开评论全文</a>&#65289;</b></div>");
-  }
   var sDelLink = "https://www.blogger.com/delete-comment.g"
       + "?blogID=5235590154125226279&amp;postID="+this.sLongId;
+
   var sReplies = ( sSubComments
                    ? "<div class='comment-replies thread-expanded'>"
                      + "<a class='thread-toggle' href='javascript:;'/>"
@@ -7584,11 +7541,22 @@ Comment.prototype.showFull = function(mapOpts)
                      + "<ol class='sub'>"+sSubComments+"</ol></div>"
                      + "</div>"
                    : "" );
+  var sActions = ( !this.bIsSpam || bShowSpam
+                   ? "<div class='comment-actions'>"
+                     + "<a class='reply-btn' href='javascript:;'>回复"+this.nTopIndex+"楼</a>"
+                     + "<a class='item-control blog-admin "+this.sItemControlClass+"' "
+                     + "href='"+sDelLink+"' style='display:none;'>删除</a>"
+                     + "<span class='menubars' update='0'/>"
+                     + "<a class='add-btn' href='javascript:;'>另开新楼</a>"
+                     + "<a class='go-level-down' href='javascript:;' title='跳转到热度排名的后一个顶层评论'>&#65310;</a>"
+                     + "<select class='go-level' update='0'><option>电梯</option></select>"
+                     + "<a class='go-level-up' href='javascript:;' title='跳转到热度排名的前一个顶层评论'>&#65308;</a>"
+                     + "</div>"
+                   : "" );
 
   var sHtml =
-      "<li class='comment "+(this.sParentLongId ? "sub" : "top")+"' data='"+this.sId+"' "
-      + "index='"+(this.sParentLongId ? this.nSubIndex : this.nTopIndex)+"' "
-      + (nHotValue ? "hot='"+nHotValue+"'" : "") + (bVisible ? "" : "style='display:none;'") + ">"
+      "<li class='comment "+sClass+"' data='"+this.sId+"' index='"+nIndex+"' "
+      + (nHotValue ? "hot='"+nHotValue+"'" : "") + ">"
       + "<a name='"+this.sId+"'>&nbsp;</a>"
       + "<div class='avatar-image-container'><img src='"+this.oAuthor.sAvatarUrl+"'></div>"
       + "<div id='c"+this.sLongId+"' class='comment-block'>"
@@ -7600,26 +7568,15 @@ Comment.prototype.showFull = function(mapOpts)
       + "</cite>"
       + "<span class='star' update='0'>"+sStarList+"</span>"
       + "<span class='datetime' title='"+sTime+"'>"
-      + (this.bIsDeleted || this.bIsBanned
-         ? sDate : "<a href='"+this.sUrl+"'>"+sDate+"</a>")
+      + (this.bIsDeleted || this.bIsBanned ? sDate : "<a href='"+this.sUrl+"'>"+sDate+"</a>")
       + "</span>"
       + "<span class='counter'>"
-      + (this.bIsDeleted || this.bIsBanned
-         ? sCounter : "<a href='"+this.sUrl+"'>"+sCounter+"</a>")
+      + (this.bIsDeleted || this.bIsBanned ? sCounter : "<a href='"+this.sUrl+"'>"+sCounter+"</a>")
       + "</span>"
-      + (this.sParentLongId ? "" : "<span class='hot'>"+sHotTitle+"</span>")
+      + (this.isSub() || this.bIsSpam ? "" : "<span class='hot'>"+sHotTitle+"</span>")
       + "</div>"  // comment-header
       + "<div class='comment-content'>"+(sContentHtml || "&nbsp;")+"</div>"
-      + "<div class='comment-actions'>"
-      + "<a class='reply-btn' href='javascript:;'>回复"+this.nTopIndex+"楼</a>"
-      + "<a class='item-control blog-admin "+this.sItemControlClass+"' "
-      + "href='"+sDelLink+"' style='display:none;'>删除</a>"
-      + "<span class='menubars' update='0'/>"
-      + "<a class='add-btn' href='javascript:;'>另开新楼</a>"
-      + "<a class='go-level-down' href='javascript:;' title='跳转到热度排名的后一个顶层评论'>&#65310;</a>"
-      + "<select class='go-level' update='0'><option>电梯</option></select>"
-      + "<a class='go-level-up' href='javascript:;' title='跳转到热度排名的前一个顶层评论'>&#65308;</a>"
-      + "</div>"  // comment-actions
+      + sActions
       + "</div>"  // comment-block
       + sReplies
       + "</li>";
@@ -7629,34 +7586,25 @@ Comment.prototype.showFull = function(mapOpts)
 Comment.prototype.showSummary = function(mapOpts)
 {
   mapOpts = mapOpts || {};
-  this.normalize();
+  var nMaxAuthorLen = ("maxAuthorLen" in mapOpts ? mapOpts.maxAuthorLen : 20);
+  var nMaxTextLen = ("maxTextLen" in mapOpts ? mapOpts.maxTextLen : 100);
 
+  this.normalize();
   Comment.initArticlesMap();
 
+  var sAuthor = this.oAuthor.sName;
+  (sAuthor.length > nMaxAuthorLen) && (sAuthor = sAuthor.substr(0, nMaxAuthorLen)+" ...");
+  ("highlightAuthor" in mapOpts) && (sAuthor = highlightSearchKeywords(sAuthor, mapOpts.highlightAuthor));
+  var sTime =  this.dtCreate.format("%0H:%0M:%0S");
   var $comment = $(
-    "<div id='comment-"+this.sId+"' index='"+this.nIndex+"'>"
+    "<div id='comment-"+this.sId+"'>"
       + "<div class='comment-header'>"
-      + "<img class='avatar'/><cite class='author'/><span class='datetime'/></div>"
+      + "<img class='avatar' src='"+this.oAuthor.sAvatarUrl+"'/><cite class='author'>"+sAuthor+"</cite>"
+      + "<span class='datetime' title='"+sTime+"'>"+getRelativeTimeDesc(this.dtCreate)+"</span></div>"
       + "<div class='comment-article'/>"
       + "<div class='comment-text'><a/></div>"
       + "</div>");
   var $comment_header = $comment.children(".comment-header");
-
-  $comment_header.children(".datetime").html(getRelativeTimeDesc(this.dtCreate));
-  $comment_header.children("img.avatar").attr("src", this.oAuthor.sAvatarUrl);
-  {
-    var $comment_author = $comment_header.children("cite.author");
-    var sAuthor = this.oAuthor.sName;
-
-    if(("maxAuthorLen" in mapOpts) && sAuthor.length>mapOpts.maxAuthorLen)
-    {
-      $comment_author.attr("title", sAuthor);
-      sAuthor = sAuthor.substr(0, mapOpts.maxAuthorLen)+" ...";
-    }
-    ("highlightAuthor" in mapOpts)
-      && (sAuthor = highlightSearchKeywords(sAuthor, mapOpts.highlightAuthor));
-    $comment_author.html(sAuthor);
-  }
   {
     var $comment_link = $comment.find(".comment-text a");
 
@@ -7664,42 +7612,31 @@ Comment.prototype.showSummary = function(mapOpts)
     assert(oUrl.bValid, "Comment.showSummary: Invalid url: " + this.sUrl);
     var sUrl = oUrl.sPath+"?comment="+oUrl.getParam("comment");  // relative path
 
-    ("keywords" in mapOpts)
-      && ( sUrl += "&q="+encodeURIComponent(mapOpts.keywords.join(" ")) );
+    ("keywords" in mapOpts) && (sUrl += "&q="+encodeURIComponent(mapOpts.keywords.join(" ")));
     ("scope" in mapOpts) && (sUrl += "&scope="+mapOpts.scope);
     $comment_link.attr("href", sUrl);
 
     ($comment_link[0].pathname != location.pathname)  // NOT current page
       && $comment_link.attr("target", "_blank");
 
-    var sText = this.sText;
-    if(("maxTextLen" in mapOpts) && sText.length>mapOpts.maxTextLen)
+    var sText = this.sText.replace(/\n{2,}/g, "\n");
+    if(sText.length > nMaxTextLen)
     {
       $comment_link.attr("title", sText)
         .tooltip({
-          content: function(callback)
-          {
-            callback( $(this).attr("title").replace(/\n/g, "<br/>") );
-          },
-          open: function(event, ui)
-          {
-            ui.tooltip.hover(function() { $(this).hide("fade") });
-          }
+          content: function(callback) { callback($(this).attr("title").replace(/\n/g, "<br/>")) },
+          open: function(event, ui) { ui.tooltip.hover(function() { $(this).hide("fade") }) }
         });
       sText = sText.substr(0, mapOpts.maxTextLen) + " ......";
     }
 
-    ("highlightText" in mapOpts)
-      && (sText = highlightSearchKeywords(sText, mapOpts.highlightText));
+    ("highlightText" in mapOpts) && (sText = highlightSearchKeywords(sText, mapOpts.highlightText));
     $comment_link.html(sText.replace(/\n/g, "<br/>"));
   }  // comment link
   while(true)
   {
     var $comment_article = $comment.children(".comment-article");
-    if($comment_article.html() !== "")
-    {
-      break;
-    }
+    if($comment_article.html() !== "") { break }
 
     var sArticlePath = (new Url(this.sUrl)).sPath;
     if(sArticlePath in Comment.mapArticles)
@@ -7728,31 +7665,114 @@ Comment.prototype.showSummary = function(mapOpts)
 
     Comment.mapArticles[sArticlePath] = "";  // set flag
     $.ajax({
-      url: Url.getFeedUrlPrefix() + "/posts/summary?alt=json&path="
-              + encodeURIComponent(sArticlePath),
+      url: Url.getFeedUrlPrefix()+"/posts/summary?alt=json&path="+encodeURIComponent(sArticlePath),
       dataType: "json",
       success: function(json)
       {
-        if(json.feed.entry.length > 0)
+        if(!("feed" in json) || !("entry" in json.feed) || 0==json.feed.entry.length) { return }
+        var article = json.feed.entry[0];
+        for(var i=0; i<article.link.length; i++)
         {
-          var article = json.feed.entry[0];
-          for(var i=0; i<article.link.length; i++)
+          if("alternate" == article.link[i].rel)
           {
-            if("alternate" == article.link[i].rel)
-            {
-              Comment.mapArticles[sArticlePath] = article.link[i].title;
-              $comment_article.html("&#12298;" + article.link[i].title + "&#12299;");
-              break;
-            }
+            Comment.mapArticles[sArticlePath] = article.link[i].title;
+            $comment_article.html("&#12298;" + article.link[i].title + "&#12299;");
+            break;
           }
         }
       },
       timeout: 1000*24
-    });  // $.ajax() end
+    });
     break;
   }  // while() end
   return $comment;
 }  // Comment.prototype.showSummary() end
+
+
+// Spam utilities
+
+function TimeGroupAnalyzer(mapOpts)
+{
+  mapOpts = mapOpts || {};
+  this.m_nRoundRange = ("range" in mapOpts ? mapOpts.range : 900);  // default is a quarter
+  this.m_nOffset = ("offset" in mapOpts ? mapOpts.range : 300);  // default is 5 minutes
+  var nBase = getMinTime().getTime()/1000;
+
+  this.m_arrGroups = [];
+  for(var i=0; i<Math.floor(this.m_nRoundRange/this.m_nOffset); i++)
+  {
+    this.m_arrGroups.push({nBase: nBase+i*this.m_nOffset, map:{} });
+  }
+}
+
+TimeGroupAnalyzer.prototype.addTime = function(nTime)
+{
+  nTime /= 1000;
+  for(var i=0; i<this.m_arrGroups.length; i++)
+  {
+    var group = this.m_arrGroups[i];
+    assert(nTime > group.nBase, "TimeGroupAnalyzer.addTime: Invalid 'nTime'!");
+    var nKey = Math.floor((nTime-group.nBase)/this.m_nRoundRange);
+    (nKey in group.map) ? group.map[nKey].push(nTime) : (group.map[nKey]=[nTime]);
+  }
+}
+
+TimeGroupAnalyzer.prototype.getSimilarNum = function(nTime)
+{
+  nTime /= 1000;
+  var nNum = 0;
+  for(var i=0; i<this.m_arrGroups.length; i++)
+  {
+    var group = this.m_arrGroups[i];
+    assert(nTime > group.nBase, "TimeGroupAnalyzer.addTime: Invalid 'nTime'!");
+    var nKey = Math.floor((nTime-group.nBase)/this.m_nRoundRange);
+    if(nKey in group.map)
+    {
+      var arr = group.map[nKey];
+      (arr.length > nNum) && (nNum = arr.length);
+    }
+  }
+  return nNum;
+}
+
+
+function TextGroupAnalyzer(mapOpts)
+{
+  mapOpts = mapOpts || {};  // reserved
+  this.mapTextGroup = {};
+}
+
+TextGroupAnalyzer.prototype.addText = function(sNewText, nCommentId, mapOpts)
+{
+  mapOpts = mapOpts || {};
+  var nCritical = ("critical" in mapOpts ? mapOpts.critical : 0.8);
+
+  var siNewText = new StrInfo(sNewText);
+  for(nGroupId in this.mapTextGroup)
+  {
+    var group = this.mapTextGroup[nGroupId];
+    if( !siNewText.isSimilarity(group.siText, nCritical) ) { continue }
+    group.arrCommentId.push(nCommentId);
+    return nGroupId;
+  }
+  // NOT found similar comment, create new group
+  var nGroupId = nCommentId;
+  this.mapTextGroup[nGroupId] = { siText:siNewText, arrCommentId:[nCommentId] };
+  return nGroupId;
+}
+
+TextGroupAnalyzer.prototype.getSimilarNum = function(nGroupId)
+{
+  assert(nGroupId in this.mapTextGroup, "TextAnalyzer.getSimilar: Invalid 'nGroupId'!");
+  return this.mapTextGroup[nGroupId].arrCommentId.length;
+}
+
+
+function TextFeatureAnalyzer(mapOpts)
+{
+  mapOpts = mapOpts || {};  // reserved
+}
+
 
 </script>
 
@@ -8707,13 +8727,13 @@ B7P64IMWOCXWEYOXIMBX6HN5MHEULFS4V
 <a href='https://program-think.blogspot.com/2017/05/share-books.html'>  分享各类电子书&#65288;政治&#12289;历史&#12289;IT 等&#65292;39本&#65289;</a>
 </li>
 <li>
+<a href='https://program-think.blogspot.com/2015/05/Wanda-and-Princelings.html'>王健林及万达集团背后的朝廷权贵家族&#65288;习&#12289;胡&#12289;温&#12289;贾&#12289;王&#65289;</a>
+</li>
+<li>
 <a href='https://program-think.blogspot.com/2017/04/The-Importance-of-Zheteng.html'>聊聊&#12304;折腾&#12305;的重要性</a>
 </li>
 <li>
 <a href='https://program-think.blogspot.com/2011/06/june-fourth-incident-0.html'>回顾六四系列[0]&#65306;为啥要写这个话题&#65311;</a>
-</li>
-<li>
-<a href='https://program-think.blogspot.com/2015/05/Wanda-and-Princelings.html'>王健林及万达集团背后的朝廷权贵家族&#65288;习&#12289;胡&#12289;温&#12289;贾&#12289;王&#65289;</a>
 </li>
 <li>
 <a href='https://program-think.blogspot.com/2017/04/Security-Vulnerabilities-in-Windows.html'>吐槽一下 Windows 的安全漏洞&#8212;&#8212;严重性超乎想象</a>
@@ -8722,10 +8742,10 @@ B7P64IMWOCXWEYOXIMBX6HN5MHEULFS4V
 <a href='https://program-think.blogspot.com/2016/04/weekly-share-100.html'>每周转载&#65306;巴拿马文件曝光天朝权贵&#65288;大量网友评论&#65289;</a>
 </li>
 <li>
-<a href='https://program-think.blogspot.com/2014/08/zhou-yongkang-corruption.html'>八卦一下周永康那些破事儿&#8212;&#8212;他的家族&#12289;朋党&#12289;生意&#12289;情妇&#65288;多图&#65289;</a>
+<a href='https://program-think.blogspot.com/2009/02/study-technology-in-three-steps.html'>学习技术的三部曲&#65306;WHAT&#12289;HOW&#12289;WHY</a>
 </li>
 <li>
-<a href='https://program-think.blogspot.com/2009/02/study-technology-in-three-steps.html'>学习技术的三部曲&#65306;WHAT&#12289;HOW&#12289;WHY</a>
+<a href='https://program-think.blogspot.com/2014/08/zhou-yongkang-corruption.html'>八卦一下周永康那些破事儿&#8212;&#8212;他的家族&#12289;朋党&#12289;生意&#12289;情妇&#65288;多图&#65289;</a>
 </li>
 </ul>
 <div class='clear'></div>
@@ -10546,6 +10566,8 @@ jQuery(function($)
   // Module variables
   var m_mapComments = {};
   var m_arrCommentId = [];
+  var m_mapLongId = {};
+
   var m_arrLevelInfo = [];
   var m_nLevelUpdateTime = 0;
 
@@ -10557,6 +10579,11 @@ jQuery(function($)
 
   var m_sMenuState = "reset";
   var m_nLastActiveTime = 0;
+  // anti spam DOS attack
+  var m_analyzerText = new TextGroupAnalyzer();
+  var m_analyzerTime = new TimeGroupAnalyzer({range:900, offset:300});
+  var m_nTimeGroupCritical = 15;
+  var m_nTestTime = 0;
 
 
   function delayForTopLevel(fnProc, fnComplete)
@@ -10599,19 +10626,13 @@ jQuery(function($)
 
   function sortTopComments(sAttr, bReverse)
   {
-    if($("#comments").inScreen(false)
-        && getCurrentMS()-m_nLastActiveTime < 1000*60*3)  // active in 3 minutes
+    if($("#comments").inScreen(false) && getCurrentMS()-m_nLastActiveTime < 1000*60*3)
     {
-      return;  // temporarily disable sort
+      return;  // active in 3 minutes, temporarily disable sort levels
     }
     var nReverse = (bReverse ? -1 : 1);
     var arrLevelInfo = m_arrLevelInfo.slice();  // make a copy
-    arrLevelInfo.sort(function(a, b)
-                      {
-                        return a[sAttr]==b[sAttr]
-                          ? 0
-                          : (a[sAttr]>b[sAttr] ? 1*nReverse : -1*nReverse)
-                      });
+    arrLevelInfo.sort(function(a, b){ return Number.cmp(a[sAttr], b[sAttr]) * nReverse });
 
     showBottomTip("正在根据热度重排楼层&#65292;请稍候", 2000);
     var $top_ol = $("#comments #comment-holder ol.top:first");
@@ -10626,7 +10647,8 @@ jQuery(function($)
                    && $top_comment.before(
                      $top_ol.children("li.comment.top[data='"+info.nId+"']")
                    );
-               });
+               }
+        );
         hideBottomTip();
 
         var nCurCommentId = parseInt(location.hash.substring(1));
@@ -10648,14 +10670,8 @@ jQuery(function($)
   {
     for(var i=0; i<m_arrLevelInfo.length; i++)
     {
-      if(m_arrLevelInfo[i].nId == nCommentId)
-      {
-        return i;
-      }
-      if(bFindSub && $.inArray(nCommentId, m_arrLevelInfo[i].arrSubId) != -1)
-      {
-        return i;
-      }
+      if(m_arrLevelInfo[i].nId == nCommentId) { return i }
+      if(bFindSub && $.inArray(nCommentId, m_arrLevelInfo[i].arrSubId) != -1) { return i }
     }
     assert(false, "idToLevel: Invalid comment id: " + nCommentId);
   }
@@ -10663,67 +10679,10 @@ jQuery(function($)
   function findCommentsByUser(comment)
   {
     var arrResults = [];
-    for(var i=0; i<m_arrCommentId.length; i++)
-    {
-      comment.isEqual(m_mapComments[m_arrCommentId[i]])
-        && arrResults.push(m_arrCommentId[i]);
-    }
+    $.each(m_arrCommentId,
+           function(i, nId){ comment.isEqual(m_mapComments[nId]) && arrResults.push(nId) });
     return arrResults;
   }
-
-  function getArticleId()
-  {
-    var nSpan = getArticleTime().getTime()-getMinTime().getTime();
-    return Radix64.toStr( Math.floor(nSpan/1000/60) );
-  }
-
-  function loadReadTime()
-  {
-    var nArticleTime = Math.floor(getArticleTime().getTime()/1000);
-    var mapReadTime = (new Cookie("comment_read")).loadMap();
-    if(!mapReadTime)
-    {
-      return nArticleTime;
-    }
-
-    var sId = getArticleId();
-    return nArticleTime
-      + ( (sId in mapReadTime) ? Radix64.toInt(mapReadTime[sId]) : 0 );
-  }
-
-  function saveReadTime(nReadTime)
-  {
-    assert(!isNaN(nReadTime), "saveReadTime: Invalid 'nReadTime'!");
-    nReadTime = parseInt(nReadTime);
-
-    nReadTime -= Math.floor(getArticleTime().getTime()/1000);
-    assert(nReadTime >= 0, "saveReadTime: Invalid 'nReadTime'!");
-    var sArticleId = getArticleId();
-    var sReadTime = sArticleId + "("+Radix64.toStr(nReadTime)+")";
-
-    var cookie = new Cookie("comment_read");
-    var sReadMap = cookie.load();
-    if(!sReadMap)
-    {
-      return cookie.save(sReadTime);
-    }
-
-    if(sReadMap.indexOf(sArticleId) >= 0)
-    {
-      var nLen = sReadMap.length;
-      sReadMap = sReadMap.replace(new RegExp(sArticleId+"\\(.+?\\)", "g"), "");
-      assert(sReadMap.length < nLen, "saveReadNum: Invalid 'comment_read' cookie!");
-    }
-
-    sReadMap += sReadTime;
-    while(sReadMap.length > 300)
-    {
-      var nLen = sReadMap.length;
-      sReadMap = sReadMap.replace(/^[\w~]+\(.+?\)/, "");
-      assert(sReadMap.length < nLen, "saveReadNum: Invalid 'comment_read' cookie!");
-    }
-    return cookie.save(sReadMap);
-  }  // saveReadTime() end
 
   function showEditor(comment)
   {
@@ -10733,8 +10692,7 @@ jQuery(function($)
     var sUrl = (sParentId
                 ? m_sEditorUrl.replace(/#/, "&parentID="+sParentId+"#")
                 : m_sEditorUrl);
-    var nHeight = 560;
-    var nWidth = window.screen.availWidth / 3;
+    var nHeight = 560, nWidth = window.screen.availWidth/3;
     var sOptions = "width=" + nWidth
         + ",height=" + nHeight
         + ",left=" + (window.screen.availWidth - nWidth)
@@ -10743,35 +10701,18 @@ jQuery(function($)
         + ",location=no,menubar=no,toolbar=no,status=no";
     var wnd = window.open(sUrl, "new-comment-"+getCurrentMS(), sOptions);
 
-    try
-    {
-      wnd.closed;
-    }
-    catch(err)
-    {
-      // Unable to get property 'closed' (IE 11)
-      return;
-    }
+    try { wnd.closed }
+    catch(err) { return }  // Unable to get property 'closed' (maybe IE 11)
     var timer = setInterval(  // wait child window to be closed
       function()
       {
-        if(!wnd.closed)
-        {
-          return;
-        }
+        if(!wnd.closed) { return }
         clearInterval(timer);
         timer = null;
 
         var results = null;
-        try
-        {
-          results = wnd.name.match(/^new-comment-(\d{13})$/);
-        }
-        catch(err)
-        {
-          // The 'wnd' still in 'www.blogger.com',
-          // permission denied to access property 'name'
-        }
+        try { results = wnd.name.match(/^new-comment-(\d{13})$/) }
+        catch(err) {}  // The 'wnd' still in 'www.blogger.com', can NOT access property 'name'
         g_loadNewComments(
           (results && 2==results.length)
             ? { maxResults:1, waitFor:parseInt(results[1]) }
@@ -10784,8 +10725,7 @@ jQuery(function($)
 
   function getMenuHtml(comment)
   {
-    assert(m_arrCommentId.length>0 && m_arrLevelInfo.length>0,
-           "getMenuHtml: Invalid call!");
+    assert(m_arrCommentId.length>0 && m_arrLevelInfo.length>0, "getMenuHtml: Invalid call!");
 
     var sUserThis = "只看此人的评论", sUserOthers = "隐藏此人的评论", sUserTip = "";
     var sSearchUser = "";
@@ -10838,9 +10778,7 @@ jQuery(function($)
   {
     $menubars.attr("update", getCurrentMS());
 
-    var menu = $menubars.find(".dropdown").menu(
-      { position: { my:"left top", at:"left bottom" } }
-    );
+    var menu = $menubars.find(".dropdown").menu({ position: {my:"left top", at:"left bottom"} });
     $(menu).mouseleave(function(){ menu.menu("collapseAll") });
     $menubars.find("li a").each(
       function() { !$(this).hasAttr("href") && $(this).attr("href", "javascript:;") }
@@ -10905,8 +10843,7 @@ jQuery(function($)
       else if(m_sMenuState.startsWith("show"))  // filterShow()
       {
         $menubars.find(".filter .reset").show();
-        ("show.user" == m_sMenuState)
-          && $menubars.find(".filter .user-this").hide();
+        ("show.user" == m_sMenuState) && $menubars.find(".filter .user-this").hide();
       }
       else if("hide" == m_sMenuState)  // filterHide()
       {
@@ -10961,10 +10898,7 @@ jQuery(function($)
     delayRun(
       function()
       {
-        for(var i=0; i<m_arrLevelInfo.length; i++)
-        {
-          m_arrLevelInfo[i].bVisible = true;
-        }
+        for(var i=0; i<m_arrLevelInfo.length; i++) { m_arrLevelInfo[i].bVisible = true }
         m_nLevelUpdateTime = getCurrentMS();
         m_sMenuState = "reset";
 
@@ -10990,7 +10924,6 @@ jQuery(function($)
       function($top_comment)
       {
         var nLevel = idToLevel(parseInt($top_comment.attr("data")), false);
-
         if(m_arrCommentId.length > 150)
         {
           nProcCount += m_arrLevelInfo[nLevel].arrSubId.length;
@@ -11001,8 +10934,7 @@ jQuery(function($)
         function setMatch($comment)
         {
           $comment.show();
-          ("user"==sType || "time"==sType)
-            && $comment.children(".comment-block").addClass("match");
+          ("user"==sType || "time"==sType) && $comment.children(".comment-block").addClass("match");
           ("user" == sType) && $comment.find(".filter:first .user-others").hide();
           return true;
         }
@@ -11019,10 +10951,7 @@ jQuery(function($)
         {
           var bHad = false;
           $top_comment.find("li.comment.sub").each(
-            function()
-            {
-              fnCondition($(this)) ? (bHad = setMatch($(this))) : $(this).hide()
-            }
+            function(){ fnCondition($(this)) ? (bHad=setMatch($(this))) : $(this).hide() }
           );
           if(bHad)
           {
@@ -11054,7 +10983,6 @@ jQuery(function($)
       function($top_comment)
       {
         var nLevel = idToLevel(parseInt($top_comment.attr("data")), false);
-
         if(m_arrCommentId.length > 150)
         {
           nProcCount += m_arrLevelInfo[nLevel].arrSubId.length;
@@ -11103,28 +11031,42 @@ jQuery(function($)
   {
     var sHtml = "<option>电梯</option>";
     var nMaxWidth = String(m_arrLevelInfo.length).length;
+
+    var arrSpamRange = null;
     for(var i=0; i<m_arrLevelInfo.length; i++)
     {
       var info = m_arrLevelInfo[i];
-      if(!info.bVisible)
+      assert(info.nId in m_mapComments, "setGoLevel: Invalid comment id!");
+      if(!info.bVisible) { continue }
+      var commentTop = m_mapComments[info.nId];
+
+      if(commentTop.bIsSpam)
       {
+        (null === arrSpamRange) ? (arrSpamRange = [i, i]) : (arrSpamRange[1] = i);
         continue;
       }
-      assert(info.nId in m_mapComments, "setGoLevel: Invalid comment id!");
-      var comment = m_mapComments[info.nId];
+      if(arrSpamRange)  // show merge range
+      {
+        var sText = intToStr(arrSpamRange[0]+1, nMaxWidth, " ").replace(/ /g, "&nbsp;");
+        if(arrSpamRange[0] != arrSpamRange[1])
+        {
+          sText += "&#8212;&#8212;" + (arrSpamRange[1]+1);
+        }
+        sHtml += "<option value='"+m_arrLevelInfo[arrSpamRange[0]].nId+"' class='spam'>"
+          + sText + " 楼 (垃圾&#65295;刷屏)</option>";
+        arrSpamRange = null;
+      }
 
-      var sText = intToStr(i+1, nMaxWidth, " ") + " 楼";
-      var sTip = sText+": "+comment.oAuthor.sName;
+      var sText = intToStr(i+1, nMaxWidth, " ").replace(/ /g, "&nbsp;")+" 楼";
+      var sTip = "";
+      sTip = sText+": "+commentTop.oAuthor.sName.htmlEncode();
       if(info.arrSubId && info.arrSubId.length>0)
       {
         sText += " / "+info.arrSubId.length+" 回复";
         var nLastReplyId = info.arrSubId[info.arrSubId.length-1];
-        sTip += "\n最后回复: "
-          + m_mapComments[nLastReplyId].oAuthor.sName.replace(/"|'|<|>/g, "");
+        sTip += "\n最后回复: " + m_mapComments[nLastReplyId].oAuthor.sName.htmlEncode();
       }
-
-      sHtml += "<option value='"+info.nId+"' title='"+sTip+"'>"
-        + sText.replace(/ /g, "&nbsp;") + "</option>";
+      sHtml += "<option value='"+info.nId+"' title='"+sTip+"'>" + sText + "</option>";
     }
 
     $go_level.attr("update", getCurrentMS()).html(sHtml).change(
@@ -11136,7 +11078,7 @@ jQuery(function($)
     ).tooltip({
       position: { my:"left center", at:"right+20 center-20" },
       content: Tooltip.content,
-      open: function(event, ui) { Tooltip.open(event, ui, 3000) }
+      open: function(event, ui){ Tooltip.open(event, ui, 3000) }
     });
   }  // setGoLevel() end
 
@@ -11182,15 +11124,19 @@ jQuery(function($)
   function saveComment(commentNew, bAddUI)
   {
     assert(!isNaN(commentNew.nId), "saveComment: Invalid comment id!");
-    assert(!(commentNew.nId in m_mapComments), "saveComment: Repeat comment!");
-    assert(m_arrCommentId.length==Object.keys(m_mapComments).length,
+    assert(!(commentNew.nId in m_mapComments), "saveComment: Repeat comment id!");
+    assert(m_arrCommentId.length == Object.keys(m_mapComments).length,
            "saveComment: Consistency check failed! The length is "
            + m_arrCommentId.length + " & " + Object.keys(m_mapComments).length);
-
     m_mapComments[commentNew.nId] = commentNew;
+
+    var bNeedSort = ( m_arrCommentId.length > 0
+                      && commentNew.nId < m_arrCommentId[m_arrCommentId.length-1] );  // for robust
     m_arrCommentId.push(commentNew.nId);
-    m_arrCommentId.sort();  // TODO
-    m_nLevelUpdateTime = getCurrentMS();
+    bNeedSort && m_arrCommentId.sort();
+
+    assert(!(commentNew.sLongId in m_mapLongId), "saveComment: Repeat long id!");
+    m_mapLongId[commentNew.sLongId] = commentNew.nId;
 
     if(commentNew.bIsInstruction)
     {
@@ -11198,71 +11144,55 @@ jQuery(function($)
       return;
     }
 
-    if(!commentNew.sParentLongId)  // is top
+    m_nLevelUpdateTime = getCurrentMS();
+    if(commentNew.isTop())
     {
       m_arrLevelInfo.push({ nId:commentNew.nId, arrSubId:[], bVisible:true, nHot:0.0 });
       commentNew.nTopIndex = m_arrLevelInfo.length;
       commentNew.nSubIndex = 0;
-      return;
     }
-
-    for(var i=0; i<m_arrCommentId.length; i++)  // is sub, find parent
+    else  // is sub
     {
-      if(m_mapComments[m_arrCommentId[i]].sLongId == commentNew.sParentLongId)
+      if(commentNew.sParentLongId in m_mapLongId)  // find parent
       {
-        var commentTop = m_mapComments[m_arrCommentId[i]];
+        var nParentId = m_mapLongId[commentNew.sParentLongId];
+        var commentTop = m_mapComments[nParentId];
         m_arrLevelInfo[commentTop.nTopIndex-1].arrSubId.push(commentNew.nId);
         commentNew.nTopIndex = commentTop.nTopIndex;
         commentNew.nSubIndex = m_arrLevelInfo[commentNew.nTopIndex-1].arrSubId.length;
-        return;
+      }
+      else  // NOT found parent, maybe banned by Google/Blogger
+      {
+        procBannedTopComment(commentNew, bAddUI)
       }
     }
-
-    // NOT found parent comment, maybe banned by Google/Blogger
-    procBannedTopComment(commentNew, bAddUI)
   }  // saveComment() end
 
   function procInstructionComment(comment)
   {
-    var json = null;
     try
     {
-      json = JSON.parse(comment.sText);
+      var json = JSON.parse(comment.sText);
+      if(!("type" in json)) { throw new Error("NOT found 'type'!") }
+
+      if("mark_spam" == json.type)
+      {
+        if(!("id" in json) || !Array.isArray(json.id)) { throw new Error("NOT found 'id'!") }
+        for(var i=0; i<json.id.length; i++)
+        {
+          (json.id[i] in m_mapComments) ? (m_mapComments[json.id[i]].bIsSpam = true)
+            : reportError("procInstructionComment: Invalid id!");
+        }
+      }
+      else if("mark_off_topic" == json.type)
+      {
+        if(!("id" in json) || !Array.isArray(json.id)) { throw new Error("NOT found 'id'!") }
+        //TODO
+      }
     }
     catch(err)
     {
-      reportError("procInstructionComment: JSON.parse() failed! " + err);
-      return;
-    }
-    if(!("type" in json))
-    {
-      reportError("procInstructionComment: json NOT found 'type'!");
-      return;
-    }
-    if("mark_spam_top" == json.type)
-    {
-      ("id" in json) && Array.isArray(json.id) && markSpamTop(json.id);
-    }
-    else if("mark_spam_sub" == json.type)
-    {
-      //("id" in json) && Array.isArray(json.id) && markSpamSub(json.id);
-    }
-
-    function markSpamTop(id_list)
-    {
-      for(var i=0; i<id_list.length; i++)
-      {
-        if(id_list[i] in m_mapComments)
-        {
-          m_mapComments[id_list[i]].bIsSpam = true;
-          var nLevel = idToLevel(id_list[i], false);
-          var arrSub = m_arrLevelInfo[nLevel].arrSubId;
-          for(var j=0; j<arrSub.length; j++)
-          {
-            m_mapComments[arrSub[j]].bIsSpam = true;
-          }
-        }
-      }
+      reportError("procInstructionComment: " + err);
     }
   }
 
@@ -11285,8 +11215,7 @@ jQuery(function($)
     commentTop.oAuthor.sAvatarUrl = "https://img1.blogblog.com/img/anon36.png";
 
     // Save banned parent
-    assert(!(commentTop.nId in m_mapComments),
-           "procBannedTopComment: Repeat parent id: " + commentTop.nId);
+    assert(!(commentTop.nId in m_mapComments), "procBannedTopComment: Repeat parent id!");
     m_mapComments[commentTop.nId] = commentTop;
     m_arrCommentId.push(commentTop.nId);
     m_arrCommentId.sort();
@@ -11301,10 +11230,7 @@ jQuery(function($)
     commentSub.nSubIndex = m_arrLevelInfo[commentSub.nTopIndex-1].arrSubId.length;
 
     m_nLevelUpdateTime = getCurrentMS();
-    if(!bAddUI)
-    {
-      return;
-    }
+    if(!bAddUI) { return }
 
     // Show banned parent comment
     var $top_comment = $(commentTop.showFull());
@@ -11340,36 +11266,16 @@ jQuery(function($)
 
   function updateTitle()
   {
+    var nSpamCount = 0;
+    $.each(m_arrCommentId, function(i, nId){ m_mapComments[nId].bIsSpam && nSpamCount++ });
+
     var sTitle =  m_arrCommentId.length
         ? m_arrLevelInfo.length+"楼 / " + m_arrCommentId.length+"条"
         : "暂无";
-    $("#comments #comments-label").html(sTitle + "评论");
+    $("#comments #comments-label").html(
+      sTitle + "评论" + (nSpamCount>0 ? "&#65288;共标注 "+nSpamCount+" 条&#8220;垃圾&#65295;刷屏&#8221;&#65289;" : "") );
     $(".post-toolbar .post-comment-link .comment-link").html("评论数&#65306;" + sTitle);
     $("#side-toolbar a.comment-number").html(m_arrCommentId.length);
-  }
-
-  function getAuthorStarList(comment)
-  {
-    var sAuthorKey = comment.oAuthor.getKey();
-
-    if(!sAuthorKey)  // anonymous WITHOUT name
-    {
-      return "&#9733;";
-    }
-    if(sAuthorKey in m_mapAuthors)
-    {
-      var info = m_mapAuthors[sAuthorKey];
-      var sStar = "";
-      for(var i=0; i<Math.floor(info.nStar); i++)
-      {
-        sStar += "&#9733;";
-      }
-      return sStar;
-    }
-    else
-    {
-      return "";
-    }
   }
 
   window.g_loadNewComments = function(mapOpts)
@@ -11398,9 +11304,8 @@ jQuery(function($)
           fnOnData && fnOnData(0);
           return;
         }
+        assert(json.feed.entry.length > 0, "g_loadNewComments: The 'entry' is empty!");
 
-        assert(json.feed.entry.length > 0,
-               "g_loadNewComments: The 'entry' is empty!");
         for(var n=0; n<json.feed.entry.length; n++)
         {
           var comment = new Comment(json.feed.entry[n]);
@@ -11472,37 +11377,52 @@ jQuery(function($)
 
       saveComment(comment, bAddUI);
       fnOnData && fnOnData(1);
-      if(!bAddUI)
+      if(!bAddUI) { return }
+      if(comment.bIsInstruction) { return }
+
+      if(comment.oAuthor.isAnonymous() && !comment.bIsSpam)  // anti spam DOS attack
       {
-        return;
+        m_analyzerTime.addTime(comment.nId);
+        comment.nTextGroupId = m_analyzerText.addText(comment.sText, comment.nId, {critical:0.8});
+        ( m_analyzerTime.getSimilarNum(comment.nId) > m_nTimeGroupCritical
+          || m_analyzerText.getSimilarNum(comment.nTextGroupId) >= 3 )
+          && (comment.bIsSpam = true);
       }
 
+      // create DOM
       var mapOpts = { starList: getAuthorStarList(comment) };
-      if(!comment.sParentLongId)
+      if(comment.isTop())
       {
         var info = m_arrLevelInfo[comment.nTopIndex-1];
         mapOpts.hotValue = info.nHot;
         mapOpts.hotTitle = "热度 " + Math.round(info.nHot*10)/10 + "&#8451;";
       }
       var $comment = $(comment.showFull(mapOpts));
-      if(comment.sParentLongId)
+      // append DOM
+      if(comment.isSub())
       {
         var nParentId = m_arrLevelInfo[comment.nTopIndex-1].nId;
         var $top_comment = $top_ol.children("li.comment[data='"+nParentId+"']");
-        assert($top_comment.length > 0, "addComment: Not found top comment!");
-        !$top_comment.find(".comment-replies").length
-          && $top_comment.append("<div class='comment-replies thread-expanded'>"
-                                 + "<a class='thread-toggle' href='javascript:;'/>"
-                                 + "<div class='comment-thread'><ol class='sub'/></div>"
-                                 + "</div>");
-        $top_comment.find(".comment-replies .comment-thread ol.sub").append($comment);
+        if($top_comment.length > 0)  // for robust
+        {
+          !$top_comment.find(".comment-replies").length
+            && $top_comment.append("<div class='comment-replies thread-expanded'>"
+                                   + "<a class='thread-toggle' href='javascript:;'/>"
+                                   + "<div class='comment-thread'><ol class='sub'/></div>"
+                                   + "</div>");
+          $top_comment.find(".comment-replies .comment-thread ol.sub").append($comment);
+        }
+        else
+        {
+          assert(false, "addComment: Not found top comment, parent id: " + nParentId);
+        }
       }
-      else
+      else  // is top
       {
         $comment.appendTo($top_ol);
       }
+      !comment.bIsSpam && $comment.children(".comment-block").addClass("unread");
 
-      $comment.children(".comment-block").addClass("unread");
       updateTitle();
       calcAllHot(
         null,
@@ -11534,19 +11454,17 @@ jQuery(function($)
     $comment_holder.find(".comment-block.current").removeClass("current");
 
     var nCurCommentId = parseInt(location.hash.substring(1));
-    if(!(nCurCommentId in m_mapComments))
-    {
-      return;
-    }
+    if(!(nCurCommentId in m_mapComments)) { return }
 
     var $cur_comment = $comment_holder.find("li.comment[data='"+nCurCommentId+"']");
-    assert($cur_comment.length>0, "onHashChange: Not found 'li.comment'!");
-
-    $cur_comment.children(".comment-block").addClass("current");
-    if($cur_comment.is(":visible"))
+    if(0 == $cur_comment.length)
     {
+      //TODO: show hidden spam comment
       return;
     }
+
+    $cur_comment.children(".comment-block").addClass("current");
+    if($cur_comment.is(":visible")) { return }
 
     for(var i=0; i<m_arrLevelInfo.length; i++)  // show hidden comments
     {
@@ -11570,19 +11488,71 @@ jQuery(function($)
     }
   }  // onHashChange() end
 
+  function detectSpamAtInit()  // anti spam DOS attack
+  {
+    var nBegin = getCurrentMS();
+
+    $.each(m_arrCommentId, function(i, nId) { m_analyzerTime.addTime(nId) });
+    $.each(m_arrCommentId,
+           function(i, nId)
+           {
+             if(m_analyzerTime.getSimilarNum(nId) > m_nTimeGroupCritical)
+             {
+               var comment = m_mapComments[nId];
+               comment.oAuthor.isAnonymous() && (comment.bIsSpam = true);
+             }
+           });
+
+    $.each(m_arrCommentId,
+           function(i, nId)
+           {
+             var comment = m_mapComments[nId];
+             if(!comment.oAuthor.isAnonymous() || comment.bIsSpam) { return }
+             var mapOpts = { critical: (comment.isTop() ? 0.9 : 0.8) };
+             comment.nTextGroupId = m_analyzerText.addText(comment.sText, comment.nId, mapOpts);
+           });
+    $.each(m_arrCommentId,
+           function(i, nId)
+           {
+             var comment = m_mapComments[nId];
+             if(!comment.oAuthor.isAnonymous() || comment.bIsSpam) { return }
+             (comment.nTextGroupId && m_analyzerText.getSimilarNum(comment.nTextGroupId)>=3)
+               && (comment.bIsSpam = true);
+           });
+
+    if(isTest())
+    {
+      dump( "time: " + (getCurrentMS()-nBegin) );
+    }
+
+    updateTitle();
+    calcAllHot(function(nNum){ setProgress("calc", nNum) }, showComments);
+  }  // detectSpamAtInit() end
+
+  function getAuthorStarList(comment)
+  {
+    if(comment.bIsSpam) { return "" }
+    var sAuthorKey = comment.oAuthor.getKey();
+    if(!sAuthorKey) { return "&#9733;" }  // anonymous WITHOUT name
+    if(!(sAuthorKey in m_mapAuthors)) { return "" }
+
+    var info = m_mapAuthors[sAuthorKey];
+    var sStar = "";
+    for(var i=0; i<Math.floor(info.nStar); i++) { sStar += "&#9733;" }
+    return sStar;
+  }
+
   function initAuthorHot()
   {
     m_mapAuthors = {};
-    for(var i = 0; i<m_arrCommentId.length; i++)
+    for(var i=0; i<m_arrCommentId.length; i++)
     {
       var nId = m_arrCommentId[i];
       var comment = m_mapComments[nId];
-      if(comment.bIsDeleted)
-      {
-        continue;
-      }
+      if(comment.bIsDeleted) { continue }
+      if(comment.bIsSpam) { continue }
 
-      assert(comment.oAuthor, "initAuthorHot: The author is NULL!");
+      assert(comment.oAuthor, "initAuthorHot: Invalid 'oAuthor'!");
       var sKey = comment.oAuthor.getKey();
       sKey && ( (sKey in m_mapAuthors)
                 ? (m_mapAuthors[sKey].nCommentNum += 1)
@@ -11591,7 +11561,7 @@ jQuery(function($)
     }
     for(var sKey in m_mapAuthors)
     {
-      assert(sKey, "initAuthorHot: The 'sKey' is NULL!");
+      assert(sKey, "initAuthorHot: Invalid 'sKey'!");
       var info = m_mapAuthors[sKey];
       info.nStar = Math.log2(info.nCommentNum+1);
       var nUserType = (info.oAuthor.isAnonymous() ? 1.5 : 2);
@@ -11614,8 +11584,7 @@ jQuery(function($)
 
     if(!sAuthorKey)  // anonymous WITHOUT name
     {
-      $comment.find(".comment-header:first .star").html("&#9733;")
-        .attr("update", getCurrentMS());
+      $comment.find(".comment-header:first .star").html("&#9733;").attr("update", getCurrentMS());
       var sTip = "此人的用户类型权重&#65306;1&#65288;无网名的匿名用户&#65289;"
           + "\n此人在本文的评论数&#65306;1"
           + "\n此人在本文的星级&#65306;1 == log2(在本文的评论数+1)"  // Math.log2(nCommentNum+1)
@@ -11628,37 +11597,22 @@ jQuery(function($)
     {
       var info = m_mapAuthors[sAuthorKey];
       var sStar = "";
-      for(var i=0; i<Math.floor(info.nStar); i++)
-      {
-        sStar += "&#9733;";
-      }
-      $comment.find(".comment-header:first .star").html(sStar)
-        .attr("update", getCurrentMS());
+      for(var i=0; i<Math.floor(info.nStar); i++) { sStar += "&#9733;" }
+      $comment.find(".comment-header:first .star").html(sStar).attr("update", getCurrentMS());
       $comment.children(".comment-block").find(".user, .star").attr("title", info.sTip);
     }
   }  // setCommentHot() end
 
   function getCommentHot(comment)
   {
-    if(comment.bIsDeleted)
-    {
-      return 0;
-    }
+    if(comment.bIsDeleted) { return 0.0 }
+    if(comment.bIsSpam) { return 0.0 }
 
     var sAuthorKey = comment.oAuthor.getKey();
-    if(!sAuthorKey)
-    {
-      return 1;
-    }
-    if(sAuthorKey in m_mapAuthors)
-    {
-      return m_mapAuthors[sAuthorKey].nHot;
-    }
-    else
-    {
-      reportError("getCommentHot: Invalid 'sAuthorKey':"+sAuthorKey);
-      return 1;
-    }
+    if(!sAuthorKey) { return 1.0 }
+    if(sAuthorKey in m_mapAuthors) { return m_mapAuthors[sAuthorKey].nHot }
+    reportError("getCommentHot: Invalid 'sAuthorKey':"+sAuthorKey);
+    return 1.0;
   }
 
   function calcAllHot(fnProc, fnComplete)
@@ -11674,6 +11628,7 @@ jQuery(function($)
         if(m_mapComments[info.nId].bIsSpam)
         {
           info.nHot = 0.0;
+          fnProc && fnProc(1+info.arrSubId.length);
           return;
         }
         // top
@@ -11682,8 +11637,7 @@ jQuery(function($)
         // sub
         for(var i=0; i<info.arrSubId.length; i++)
         {
-          var comment = m_mapComments[info.arrSubId[i]];
-          info.nHot += getCommentHot(comment);
+          info.nHot += getCommentHot(m_mapComments[info.arrSubId[i]]);
         }
         fnProc && fnProc(1+info.arrSubId.length);
       },
@@ -11717,9 +11671,7 @@ jQuery(function($)
     $toolbar.find(".filter").children("a").attr("href", "javascript:;");
     $toolbar.find(".filter .reset").click(function(){ filterReset() });
 
-    var menu = $toolbar.find(".dropdown").menu(
-      { position: { my:"left top", at:"left bottom" } }
-    );
+    var menu = $toolbar.find(".dropdown").menu({ position: {my:"left top", at:"left bottom"} });
     $(menu).mouseleave(function(){ menu.menu("collapseAll") });
 
     function showTimeRange()
@@ -11747,10 +11699,8 @@ jQuery(function($)
       $range.children("a#search").click(
         function()
         {
-          var dtMin = Date.parseISO($range.find("#min-date").val()
-                                    + "T" + $min_hour.val() + ":00:00");
-          var dtMax = Date.parseISO($range.find("#max-date").val()
-                                    + "T" + $max_hour.val() + ":59:59");
+          var dtMin = Date.parseISO($range.find("#min-date").val()+"T"+$min_hour.val()+":00:00");
+          var dtMax = Date.parseISO($range.find("#max-date").val()+"T"+$max_hour.val()+":59:59");
           filterByTime(dtMin.getTime()/1000, dtMax.getTime()/1000);
         }
       ).attr("href", "javascript:;");
@@ -11779,8 +11729,6 @@ jQuery(function($)
   function complete()
   {
     initToolbar();
-    updateTitle();
-
     setInterval(function(){ g_loadNewComments() }, 1000*60*10);
 
     $("#comments #comments-loading").remove();
@@ -11794,7 +11742,6 @@ jQuery(function($)
       window.addEventListener("hashchange", onHashChange, false);
       onHashChange();
     }
-
     var nCommentId = parseInt((new Url(null)).getParam("comment"));
     (nCommentId in m_mapComments) && (location.hash = "#"+nCommentId);
   }  // complete() end
@@ -11829,14 +11776,10 @@ jQuery(function($)
   function loadAbove200()
   {
     var $comments = $("#comments");
-
     var nInitTotal = parseInt($comments.attr("init_num"));
-    assert(m_arrCommentId.length>=200,
-           "loadAbove200: Invalid size of 'm_arrCommentId': " + m_arrCommentId.length);
+    assert(m_arrCommentId.length>=200, "loadAbove200: Invalid size of 'm_arrCommentId'!");
 
-    var bIsLoading = false;
-    var dtLastLoad = new Date();
-    var nNetError = 0;
+    var bIsLoading = false, dtLastLoad = new Date(), nNetError = 0;
     var mapOpts =
     {
       onData: function(nCommentNum)
@@ -11847,10 +11790,7 @@ jQuery(function($)
           dtLastLoad = new Date();
           nNetError = 0;
           setProgress("load", nCommentNum);
-          if(m_arrCommentId.length < nInitTotal)
-          {
-            return;
-          }
+          if(m_arrCommentId.length < nInitTotal) { return }
         }
         assert(0==nCommentNum || m_arrCommentId.length>=nInitTotal, "loadAbove200.onData");
         dtLastLoad = null;  // flag of 'no more data'
@@ -11876,7 +11816,7 @@ jQuery(function($)
           clearInterval(timer);
           timer = null;
 
-          calcAllHot(function(nNum){ setProgress("calc", nNum) }, showComments);
+          detectSpamAtInit();
           return;
         }
         if( (getCurrentMS()-dtLastLoad.getTime() > 60*1000)  // load timeout
@@ -11893,9 +11833,8 @@ jQuery(function($)
               function()
               {
                 $(this).closest("span").remove();
-                $comments.children("#comments-loading")
-                  .prepend("<div>正在处理已加载的这部分评论</div>");
-                calcAllHot(function(nNum){ setProgress("calc", nNum) }, showComments);
+                $comments.children("#comments-loading").prepend("<div>正在处理已加载的这部分评论</div>");
+                detectSpamAtInit();
               }
             );
         }
@@ -11910,9 +11849,9 @@ jQuery(function($)
     var $top_ol = $comment_holder.children(".comment-thread").children("ol");
     assert(1 == $top_ol.length, "showComments: Multi 'ol.top'!");
 
-    // sync sort array
+    // SYNC sort array
     var arrLevelInfo = m_arrLevelInfo.slice();
-    arrLevelInfo.sort(function(a, b){ return a.nHot==b.nHot ? 0 : (a.nHot>b.nHot ? -1 : 1) });
+    arrLevelInfo.sort(function(a, b){ return Number.cmp(a.nHot, b.nHot) * -1 });
 
     m_nLevelUpdateTime = getCurrentMS();
     //var mapConfig = loadConfig();  // reserved
@@ -11922,6 +11861,8 @@ jQuery(function($)
       30,
       function(n, info)
       {
+        m_mapComments[info.nId].bIsSpam && (info.nHot = 0.0);
+
         sLevelsHtml += getLevelHtml(info);
         nCount += (1+info.arrSubId.length);
         if(sLevelsHtml.length > 1024*128)  // cache size
@@ -11955,16 +11896,8 @@ jQuery(function($)
       assert(info.nId in m_mapComments, "getLevelHtml: Invalid comment id!");
       assert(Array.isArray(info.arrSubId), "getLevelHtml: Invalid 'arrSubId'!");
 
-      var commentTop = m_mapComments[info.nId];
-      var sSubCommentHtml = "";
-      if(commentTop.bIsSpam)
-      {
-        sSubCommentHtml = "<li class='restore load'>"
-          + "<div>本楼被管理员标记为&#8220;垃圾&#65295;SPAM&#8221;&#65292;此处隐藏了 "+info.arrSubId.length+" 条评论&#12290;"
-          + "<a href='javascript:;'>重新显示这些评论</a>"
-          + "</div></li>";
-      }
-      else
+      var commentTop = m_mapComments[info.nId], sSubCommentHtml = "";
+      if(!commentTop.bIsSpam)
       {
         for(var i=0; i<info.arrSubId.length; i++)
         {
@@ -11972,26 +11905,23 @@ jQuery(function($)
           sSubCommentHtml += commentSub.showFull({ starList: getAuthorStarList(commentSub) });
         }
       }
-      return commentTop.showFull(
-        {
-          visible: true,  // top comment force visible
-          starList: getAuthorStarList(commentTop),
-          hotValue: info.nHot,
-          hotTitle: "热度 " + Math.round(info.nHot*10)/10 + "&#8451;",
-          subComments: sSubCommentHtml
-        }
-      );
+      var mapOpts =
+      {
+        starList: getAuthorStarList(commentTop),
+        hotValue: info.nHot,
+        hotTitle: "热度 " + Math.round(info.nHot*10)/10 + "&#8451;",
+        subComments: sSubCommentHtml
+      };
+      return commentTop.showFull(mapOpts);
     }  // getLevelHtml() end
   }  // showComments() end
 
   function parseBelow200()
   {
+    // 'g_arrInitComments' is static declare in page.
     assert(Array.isArray(g_arrInitComments) && g_arrInitComments.length>0,
            "parseBelow200: Invalid 'g_arrInitComments'!");
-    for(var i=0; i<g_arrInitComments.length; i++)
-    {
-      saveComment(json2comment(g_arrInitComments[i]), false);
-    }
+    $.each(g_arrInitComments, function(i, json){ saveComment(json2comment(json), false) });
 
     function json2comment(json)
     {
@@ -11999,8 +11929,7 @@ jQuery(function($)
       comment.sLongId = json.id;
       ("parentId" in json) && (comment.sParentLongId = json.parentId);
 
-      comment.sUrl = json.permalink.replace(/(\?|&)showComment=/i, "$1comment=")
-        .replace(/#c\d+$/i, "");;
+      comment.sUrl = json.permalink.replace(/(\?|&)showComment=/i, "$1comment=").replace(/#c\d+$/i, "");
       comment.sId = (new Url(comment.sUrl)).getParam("comment");
       assert(comment.sId, "json2comment: Invalid url:'"+comment.sUrl+"'!");
       comment.nId = parseInt(comment.sId);
@@ -12011,8 +11940,7 @@ jQuery(function($)
       comment.oAuthor.sName = json.author.name;
       comment.oAuthor.sHomeUrl = json.author.profileUrl;
       comment.oAuthor.sAvatarUrl = "https:"+json.author.avatarUrl;
-      comment.sItemControlClass = json.deleteclass
-        .replace(/item\-control|blog\-admin/g, "").trim();
+      comment.sItemControlClass = json.deleteclass.replace(/item\-control|blog\-admin/g, "").trim();
       comment.bIsDeleted = (comment.sItemControlClass.indexOf("pid-") == -1);
       comment.sText = comment.bIsDeleted ? "" : json.body;
       comment.normalize();  // for security
@@ -12060,13 +11988,14 @@ jQuery(function($)
           function(){ $(this).children(".comment-actions").find(".menubars, .blog-admin").hide() }
          )
       .on("click", ".comment-replies .thread-toggle", function(){ toggleThread($(this)) })
-      .on("click", ".comment-replies .restore.filter a", function(){ showFilterComments($(this)) })
-      .on("click", ".comment-replies .restore.load a", function(){ loadHiddenComments($(this)) })
       .on("click", ".comment-content .read-more", function(){ readMore($(this)) })
+      .on("click", ".comment-replies .restore.filter a", function(){ showFilterComments($(this)) })
+      .on("click", ".comment-content .restore.load a", function(){ loadHiddenComment($(this)) })
       .on("click", ".comment-content a.bbcode", function(evt){ clickBBCodeLink(evt, $(this)) })
       .on("click", ".bbcode.image .show-real", function(){ showBBCodeImg($(this)) })
       .on("click", ".bbcode.image .show-icon", function(){ showBBCodeIcon($(this)) })
       .mousemove(function(){ m_nLastActiveTime = getCurrentMS() });
+
     $(window).scroll(
       function(){ $comments.inScreen(false) && (m_nLastActiveTime = getCurrentMS()) }
     );
@@ -12092,7 +12021,7 @@ jQuery(function($)
 
       var nUpdateTime = parseInt($star.attr("update"));
       assert(!isNaN(nUpdateTime), "onMouseEnterComment: Invalid 'update' attr at star!");
-      (nUpdateTime<m_nAuthorsUpdateTime) && setCommentHot($comment);
+      (nUpdateTime<m_nAuthorsUpdateTime) && !$comment.hasClass("spam") && setCommentHot($comment);
     }
 
     function toggleThread($btn)
@@ -12117,30 +12046,51 @@ jQuery(function($)
       var $restore = $btn.closest("li.restore.filter");
       var $top_comment = $restore.closest("li.comment.top");
       var arrId = $restore.attr("data").split(",");
-      for(var i=0; i<arrId.length; i++)
-      {
-        $top_comment.find("li.comment[data='"+arrId[i]+"']").show();
-      }
+      $.each(arrId, function(i, nId){ $top_comment.find("li.comment[data='"+nId+"']").show() });
       $restore.remove();
     }
 
-    function loadHiddenComments($btn)
+    function loadHiddenComment($btn)
     {
-      var $comment = $btn.closest("li.comment.top");
-      var nId = parseInt($comment.attr("data"));
-      assert(nId in m_mapComments, "loadHiddenComments: Invalid comment id!");
-      var info = m_arrLevelInfo[idToLevel(nId, false)];
-
-      var sSubCommentHtml = "";
-      for(var i=0; i<info.arrSubId.length; i++)
+      var $restore = $btn.closest(".restore.load");
+      if($restore.hasClass("top"))
       {
-        var commentSub = m_mapComments[info.arrSubId[i]];
-        var mapOpts = { starList: getAuthorStarList(commentSub), visible:true };
-        sSubCommentHtml += commentSub.showFull(mapOpts);
+        var $comment_top = $restore.closest("li.comment.top");
+        var nId = parseInt($comment_top.attr("data"));
+        assert(nId in m_mapComments, "loadHiddenComment: Invalid comment id!");
+
+        var arrSubId = m_arrLevelInfo[idToLevel(nId, false)].arrSubId;
+        var sSubCommentHtml = "";
+        for(var i=0; i<arrSubId.length; i++)
+        {
+          var commentSub = m_mapComments[arrSubId[i]];
+          sSubCommentHtml += commentSub.showFull({ starList: getAuthorStarList(commentSub) });
+        }
+
+        var commentTop = m_mapComments[nId];
+        var mapOpts =
+        {
+          showSpam: true,  // force show
+          starList: getAuthorStarList(commentTop),
+          subComments: sSubCommentHtml
+        };
+        $comment_top.after( $(commentTop.showFull(mapOpts)) ).remove();
       }
-      $comment.find(".comment-replies .restore.load").remove();
-      $comment.find("ol.sub").html(sSubCommentHtml);
-    }
+      else if($restore.hasClass("sub"))
+      {
+        var $comment_sub = $restore.closest("li.comment.sub");
+        var nId = parseInt($comment_sub.attr("data"));
+        assert(nId in m_mapComments, "loadHiddenComment: Invalid comment id!");
+
+        var commentSub = m_mapComments[nId];
+        var mapOpts = { showSpam: true, starList: getAuthorStarList(commentSub) };
+        $comment_sub.after( $(commentSub.showFull(mapOpts)) ).remove();
+      }
+      else
+      {
+        assert(false, "loadHiddenComment: Invalid class attr!");
+      }
+    }  // loadHiddenComment() end
 
     function readMore($btn)
     {
@@ -12183,10 +12133,7 @@ jQuery(function($)
       $img_icon.hide();
       $img_real.show();
       $center.find(".size").show();
-      if($img_real.hasAttr("src"))
-      {
-        return;
-      }
+      if($img_real.hasAttr("src")) { return }
 
       $img_real.attr("alt", "正在载入 原始图 ......")
         .load(
@@ -12227,8 +12174,7 @@ jQuery(function($)
     if($comments.hasAttr("init_num"))
     {
       nInitTotal = parseInt($comments.attr("init_num"));
-      assert(!isNaN(nInitTotal) && nInitTotal>0,
-             "init: Invalid 'init_num' attr!");
+      assert(!isNaN(nInitTotal) && nInitTotal>0, "init: Invalid 'init_num' attr!");
     }
     else
     {
@@ -12238,8 +12184,7 @@ jQuery(function($)
 
     if(nInitTotal > 0)
     {
-      $comments.find("#comment-holder")
-        .html("<div class='comment-thread'><ol class='top'/></div>");
+      $comments.find("#comment-holder").html("<div class='comment-thread'><ol class='top'/></div>");
       $("#blog-pager").hide();
       $comments.children("#comments-loading").show()
         .html("<div id='progress-bar' data='0'><div id='progress-label'/></div>");
@@ -12253,7 +12198,7 @@ jQuery(function($)
       else
       {
         setProgress("calc", 0);
-        calcAllHot(function(nNum){ setProgress("calc", nNum) }, showComments);
+        detectSpamAtInit();
       }
     }
     else
@@ -12262,7 +12207,7 @@ jQuery(function($)
           + "<h4 id='comments-label'/>"
           + "<div id='comments-toolbar'/>"
           + "<div id='comments-warning'/>"
-          + "<div id='comments-content'>" // TODO
+          + "<div id='comments-content'>"
           +   "<div id='comment-holder'>"
           +     "<div class='comment-thread'><ol class='top'/></div>"
           +   "</div>"  // comment-holder
@@ -12275,7 +12220,7 @@ jQuery(function($)
     $comments.find("#comment-holder")
       .after("<div class='comment-actions top'><a class='add-btn' href='javascript:;'>添加评论</a></div>");
 
-    $("#ie-ver-lt-10").length
+    $("#ie-ver-lt-10").length  // IE version <= 9
       && $comments.children("#comments-warning").html("你的 IE 版本太老&#65292;赶紧升级或者换个浏览器吧&#65281;");
   }  // init() end
 
@@ -12396,6 +12341,10 @@ jQuery(function($)
 #comments li.comment .comment-block.current {
   border-color: DodgerBlue !important;
 }
+#comments li.comment.spam .comment-block {
+  background-color: DarkGray !important;
+  border-color: DarkGray !important;
+}
 
 #comments li.comment.sub {
   padding: 0px !important;
@@ -12405,7 +12354,7 @@ jQuery(function($)
 }
 
 /*--@ Restore hidden comments @--*/
-#comments li.restore {
+#comments li.restore.filter {
   text-align: center;
   margin: 15px 0px;
 }
@@ -12500,6 +12449,9 @@ jQuery(function($)
   height: 30px;
   font-family: "Courier New", Courier, monospace;
   line-height: 30px;
+}
+#comments .comment-actions .go-level > option.spam {
+  background-color: Gray;
 }
 #comments .comment-actions .add-btn,
 #comments .comment-actions .reply-btn {
@@ -12656,6 +12608,10 @@ jQuery(function($)
 jQuery(function($)
 {
   // Module variables
+  var m_mapTweets = {};
+  var m_nMinCommentId = null;
+  var m_nMaxCommentId = null;
+
   var m_nInitNum = 0;
   var m_bLoading = false;
 
@@ -12664,34 +12620,46 @@ jQuery(function($)
 
   var m_nSpamNum = 0;
   var m_nNoiseNum = 0;
+  // anti spam DOS attack
+  var m_analyzerText = new TextGroupAnalyzer();
+  var m_analyzerTime = new TimeGroupAnalyzer({range:1800, offset:300});
+  var m_nTimeGroupCritical = 20;
 
 
   window.g_loadTweets = function(bInit, bAuto)
   {
-    $("#tweets .comments-loading").html(bInit ? "正在加载 ..." : "正在刷新 ...");
     m_bLoading = true;
 
-    var sFeedUrl = Url.getFeedUrlPrefix() + "/comments/full?alt=json";
+    var sFeedUrl = Url.getFeedUrlPrefix() + "/comments/full?alt=json&v=2&orderby=published";
+    var bLoadOld = false;
     if(bInit)
     {
       sFeedUrl += "&max-results=" + m_nInitNum;
+      if(m_nMinCommentId !== null)
+      {
+        bLoadOld = true;
+        sFeedUrl += "&published-max=" + (new Date(m_nMinCommentId-1)).toISOString();
+        $("#tweets .comments-loading").html("检测到刷屏&#65292;加载更早的评论...");
+      }
+      else
+      {
+        $("#tweets .comments-loading").html("正在加载...");
+      }
     }
     else
     {
-      var $block = $("#tweets .comments-content .comment-block:first");
-      if(!$block.length)
-      {
-        return;
-      }
-      var sNewestId = $block.attr("id");
-      var nMaxTime = parseInt(sNewestId.substr(8));  // Trim "comment-"
-      sFeedUrl += "&published-min=" + (new Date(nMaxTime+1)).toISOString();
+      assert(m_nMaxCommentId !== null, "g_loadTweets: The 'm_nMaxCommentId' is 'null'!");
+      sFeedUrl += "&published-min=" + (new Date(m_nMaxCommentId+1)).toISOString();
+      $("#tweets .comments-loading").html("正在刷新...");
     }
 
     $.ajax({
       url: sFeedUrl,
       dataType: "json",
-      success: function(json) { loadComplete(json, bInit) },
+      success: function(json)
+      {
+        loadComplete(json, bInit, bLoadOld);
+      },
       error: function(xhr, sStatus)
       {
         (!bAuto && !bInit)  // Manual refresh
@@ -12701,9 +12669,10 @@ jQuery(function($)
       {
         m_bLoading = false;
         $("#tweets .comments-loading").html("");
-        !bAuto && $("#tweets .comments-toolbar .refresh").show();
+        (!bAuto && !bInit)  // Manual refresh
+          && $("#tweets .comments-toolbar .refresh").show();
       },
-      timeout: (!bAuto && !bInit) ? 1000*24 : 1000*48
+      timeout: 1000*30
     });
   }  // g_loadTweets() end
 
@@ -12742,14 +12711,24 @@ jQuery(function($)
     bNotFoundComment && window.g_loadNewComments();  // Notify comment module to refresh
   }
 
-  function loadComplete(json, bInit)
+  function loadComplete(json, bInit, bLoadOld)
   {
-    var nShowNum = showTweets(json, bInit);
+    saveTweets(json, bInit, bLoadOld);
     updateCreateTime();
 
-    if(bInit)
+    if(!bInit)
     {
-      $("#tweets hr").show();
+      updateArticleTitle();
+      return;
+    }
+
+    if($("#tweets .comments-content .comment-block").length < 50)
+    {
+      delayRun(function(){ g_loadTweets(true, false) }, 200);
+    }
+    else
+    {
+      $("#tweets .comments-toolbar .refresh").show();
       (new Url(null)).getParam("comment")
         && $("#comments #comments-loading").is(":visible")
         && $("#comments").scrollTo("fast");  // Make comment loading progressbar visible
@@ -12767,68 +12746,101 @@ jQuery(function($)
         500
       );
     }
-    else
-    {
-      updateArticleTitle();
-    }
   }  // loadComplete() end
 
-  function showTweets(json, bInit)
+  function saveTweets(json, bInit, bLoadOld)
   {
-    if(!("feed" in json) || !("entry" in json.feed))
-    {
-      return;
-    }
+    if(!("feed" in json) || !("entry" in json.feed)) { return }
 
-    var nShowNum = 0;
-    var $content = $("#tweets .comments-content");
-    for(var n=json.feed.entry.length-1; n>=0; n--)
+    var arrId = [];
+    for(var n=json.feed.entry.length-1; n>=0; n--)  // from old to new
     {
       var comment = new Comment(json.feed.entry[n]);
+      if(comment.bIsInstruction) { continue }
+      if(comment.nId in m_mapTweets) { continue }
 
-      if(comment.sText.length <= 6)  // Too short, lacks info
-      {
-        m_nNoiseNum += 1;
-        continue;
-      }
-      if(!comment.sText.match(/[\u4E00-\u9FFF]+/))  // Not found chinese char
-      {
-        m_nSpamNum += 1;
-        continue;
-      }
+      m_mapTweets[comment.nId] = comment;
+      arrId.push(comment.nId);
+      ( (null===m_nMinCommentId) || (comment.nId < m_nMinCommentId) )
+        && (m_nMinCommentId = comment.nId);
+      ( (null===m_nMaxCommentId) || (comment.nId > m_nMaxCommentId) )
+        && (m_nMaxCommentId = comment.nId);
 
-      if(!bInit && $content.children("#comment-"+comment.sId).length>0)
+      if(comment.oAuthor.isAnonymous())  // anti spam DOS attack
       {
-        continue;
+        comment.nTextGroupId = m_analyzerText.addText(comment.sText, comment.nId, {critical:0.6});
+        m_analyzerTime.addTime(comment.nId);
       }
+    }
+    bLoadOld && arrId.sort(function(a, b){ return Number.cmp(a, b) * -1 });  // reverse
+    showTweets(arrId, bInit, bLoadOld);
 
-      var $comment_block = comment.showSummary({ maxTextLen:128, maxAuthorLen:16 })
-        .addClass("comment-block");
-      $content.prepend($comment_block);
-      if(!bInit)
-      {
-        nShowNum += 1;
-        $comment_block.css("background-color", "LightYellow");
-      }
-    }  // for() end
-
+    (m_nSpamNum > 0 || m_nNoiseNum > 0) && $("#tweets hr").show();
     (m_nSpamNum > 0) && $("#tweets .spam-count").html(m_nSpamNum).parent().show();
     (m_nNoiseNum > 0) && $("#tweets .noise-count").html(m_nNoiseNum).parent().show();
-    if(nShowNum > 0)
-    {
-      delayRun(
-        function()
-        {
-          var $comment_block = $content.children(".comment-block");
-          for(var i=0; i<nShowNum; i++)
-          {
-            $comment_block.eq(i).css("background-color", "white");
-          }
-        },
-        1000*10);
-    }
+  }  // saveTweets() end
 
-    return nShowNum;
+  function showTweets(arrCommentId, bInit, bLoadOld)
+  {
+    var $content = $("#tweets .comments-content");
+    var nHiddenCount = 0;
+
+    for(var i=0; i<arrCommentId.length; i++)
+    {
+      var comment = m_mapTweets[arrCommentId[i]];
+      if(comment.oAuthor.isAnonymous())  // anti spam DOS attack
+      {
+        if( (m_analyzerTime.getSimilarNum(comment.nId) > m_nTimeGroupCritical)
+            || (comment.nTextGroupId && m_analyzerText.getSimilarNum(comment.nTextGroupId)>=2) )
+        {
+          comment.bIsSpam = true;
+          m_nSpamNum++;
+          nHiddenCount++;
+          continue;
+        }
+      }
+      if(comment.sText.mergeGBK().length <= 6)  // Too short, lacks info
+      {
+        m_nNoiseNum++;
+        nHiddenCount++;
+        continue;
+      }
+
+      var $comment_block = comment.showSummary({maxTextLen:60}).addClass("comment-block");
+      var sHtml = (nHiddenCount > 0
+                   ? "<div class='comment-block ignore' data='"+nHiddenCount+"'>"
+                     + "&#65288;此处自动过滤了 "+nHiddenCount+" 条&#65289;</div>"
+                   : "");
+      if(bLoadOld)
+      {
+        /*if(sHtml)
+        {
+          var $last = $content.children(".comment-block:last");
+          if($last.hasClass("ignore"))
+          {
+            nHiddenCount += parseInt($last.attr("data"));
+            $last.attr("data", nHiddenCount).html("&#65288;此处自动过滤了 "+nHiddenCount+" 条&#65289;");
+          }
+          else
+          {
+            $content.append(sHtml);
+          }
+        }*/
+        $content.append($comment_block);
+      }
+      else
+      {
+        //sHtml && $content.prepend(sHtml);
+        $content.prepend($comment_block);
+      }
+      (nHiddenCount > 0) && (nHiddenCount = 0);
+
+      if(!bInit)
+      {
+        $comment_block.css("background-color", "LightYellow");
+        delayRun(function(){ $comment_block.css("background-color", "White") }, 1000*10);
+      }
+    }  // for() end
   }  // showTweets() end
 
   function initAutoLoad(mapConfig)
@@ -12878,7 +12890,7 @@ jQuery(function($)
 
     var mapConfig = loadConfig();
     m_nInitNum = parseInt(mapConfig["tweets.init-num"]);
-    isNaN(m_nInitNum) && (m_nInitNum = 50);
+    assert(!isNaN(m_nInitNum), "init: Invalid 'init-num' attr!");
     (m_nInitNum < 10) && (m_nInitNum = 10);
     (m_nInitNum > 100) && (m_nInitNum = 100);
     g_loadTweets(true, false);
@@ -12892,23 +12904,14 @@ jQuery(function($)
     );
 
     initAutoLoad(mapConfig);
-    setInterval(
-      function() { updateCreateTime() },
-      1000*60*10
-    );
+    setInterval(function(){ updateCreateTime() }, 1000*60*10);
   }  // init() end
 
   $(document).ready(
     function()
     {
-      try
-      {
-        init();
-      }
-      catch(err)
-      {
-        reportError("init: Catch exception:\n" + err);
-      }
+      try { init() }
+      catch(err) { reportError("init: Catch exception: " + err) }
     }
   );
 });
@@ -12928,19 +12931,19 @@ jQuery(function($)
     <span class="disable" style="display:none;">自动刷新已禁用</span>
   </div>
   <hr style="display:none;"/>
-  <div class="comments-content"></div>
-  <hr style="display:none;"/>
   <div class="comments-warning">
     <noscript>
       <b>你的浏览器&#12304;禁用了&#12305;JavaScript 脚本&#65292;<br/>无法显示&#8220;最新评论&#8221; :(</b>
     </noscript>
     <div style="display:none;">
-      已经过滤了 <span class="noise-count" style="font-weight:bold;"></span> 条&#12304;没信息量&#65288;太短&#65289;&#12305;的留言
+      共自动过滤了 <span class="noise-count" style="font-weight:bold;"></span> 条&#12304;没信息量&#12305;的留言
     </div>
     <div style="display:none;">
-      已经过滤了 <span class="spam-count" style="font-weight:bold;"></span> 条&#12304;疑似垃圾广告&#12305;的留言
+      共自动过滤了 <span class="spam-count" style="font-weight:bold;"></span> 条&#12304;刷屏&#12305;的留言
     </div>
   </div>
+  <hr style="display:none;"/>
+  <div class="comments-content"></div>
 </div>
 
 
@@ -12958,6 +12961,9 @@ jQuery(function($)
 
 #tweets .comments-content .comment-block {
   padding: 12px 0px;
+}
+#tweets .comments-content .comment-block.ignore {
+  background-color: Silver;
 }
 
 /*--@ Comment header @--*/
@@ -12992,16 +12998,6 @@ jQuery(function($)
 }
 
 </style>
-
-<noscript>
-<style type="text/css">
-
-#tweets a.refresh {
-  display: none !important;
-}
-
-</style>
-</noscript>
 </div>
 <div class='clear'></div>
 <span class='widget-item-control'>
@@ -13327,12 +13323,12 @@ jQuery(function($)
 <!-- end outer-wrapper -->
 <script src='https://apis.google.com/js/plusone.js' type='text/javascript'></script>
 
-<script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/1411214009-widgets.js"></script>
+<script type="text/javascript" src="https://www.blogger.com/static/v1/widgets/513252908-widgets.js"></script>
 <script type='text/javascript'>
-window['__wavt'] = 'AOuZoY4UBoQUR-05m7w0MyO8qSZi93qRmQ:1495402682700';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d5235590154125226279','//program-think.blogspot.com/2012/','5235590154125226279');
-_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '5235590154125226279', 'title': '编程随想的博客', 'url': 'https://program-think.blogspot.com/2012/', 'canonicalUrl': 'https://program-think.blogspot.com/2012/', 'homepageUrl': 'https://program-think.blogspot.com/', 'searchUrl': 'https://program-think.blogspot.com/search', 'canonicalHomepageUrl': 'https://program-think.blogspot.com/', 'blogspotFaviconUrl': 'https://program-think.blogspot.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': false, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'zh-CN', 'localeUnderscoreDelimited': 'zh_cn', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22编程随想的博客 - Atom\x22 href\x3d\x22https://program-think.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22编程随想的博客 - RSS\x22 href\x3d\x22https://program-think.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22编程随想的博客 - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/5235590154125226279/posts/default\x22 /\x3e\n', 'meTag': '', 'openIdOpTag': '', 'mobileHeadScript': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/268e34b382720367', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'sharing': {'platforms': [{'name': '获取链接', 'key': 'link', 'shareMessage': '获取链接', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': '分享到 Facebook', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': '分享到 Twitter', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': '分享到 Pinterest', 'target': 'pinterest'}, {'name': 'Google+', 'key': 'googlePlus', 'shareMessage': '分享到 Google+', 'target': 'googleplus'}, {'name': '电子邮件', 'key': 'email', 'shareMessage': '电子邮件', 'target': 'email'}], 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27zh_CN\x27};\x3c/script\x3e'}, 'jumpLinkMessage': '阅读更多帖子 &#187;', 'pageType': 'archive', 'pageName': '2012', 'pageTitle': '编程随想的博客: 2012'}}, {'name': 'features', 'data': {'unsupported_browser_message': 'false', 'lightbox_img_parsing': 'false', 'sharing_get_link_dialog': 'false'}}, {'name': 'messages', 'data': {'linkCopiedToClipboard': '链接已复制到剪贴板&#65281;', 'postLink': '博文链接'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': '自定义', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': '编程随想的博客', 'description': '', 'url': 'https://program-think.blogspot.com/2012/', 'type': 'feed', 'isSingleItem': false, 'isMultipleItems': true, 'isError': false, 'isPage': false, 'isPost': false, 'isHomepage': false, 'isArchive': true, 'isLabelSearch': false, 'archive': {'year': 2012, 'rangeMessage': '目前显示的是 2012的博文'}}}]);
+window['__wavt'] = 'AOuZoY5KmAy1sjszWUOHq--6FwZww0WOWw:1495972934300';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d5235590154125226279','//program-think.blogspot.com/2012/','5235590154125226279');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '5235590154125226279', 'title': '编程随想的博客', 'url': 'https://program-think.blogspot.com/2012/', 'canonicalUrl': 'https://program-think.blogspot.com/2012/', 'homepageUrl': 'https://program-think.blogspot.com/', 'searchUrl': 'https://program-think.blogspot.com/search', 'canonicalHomepageUrl': 'https://program-think.blogspot.com/', 'blogspotFaviconUrl': 'https://program-think.blogspot.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': false, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': '', 'encoding': 'UTF-8', 'locale': 'zh-CN', 'localeUnderscoreDelimited': 'zh_cn', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22编程随想的博客 - Atom\x22 href\x3d\x22https://program-think.blogspot.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22编程随想的博客 - RSS\x22 href\x3d\x22https://program-think.blogspot.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22编程随想的博客 - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/5235590154125226279/posts/default\x22 /\x3e\n', 'meTag': '', 'openIdOpTag': '', 'mobileHeadScript': '', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/3db44de20395f7da', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'sharing': {'platforms': [{'name': '获取链接', 'key': 'link', 'shareMessage': '获取链接', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': '分享到 Facebook', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': '分享到 Twitter', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': '分享到 Pinterest', 'target': 'pinterest'}, {'name': 'Google+', 'key': 'googlePlus', 'shareMessage': '分享到 Google+', 'target': 'googleplus'}, {'name': '电子邮件', 'key': 'email', 'shareMessage': '电子邮件', 'target': 'email'}], 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27zh_CN\x27};\x3c/script\x3e'}, 'jumpLinkMessage': '阅读更多帖子 &#187;', 'pageType': 'archive', 'pageName': '2012', 'pageTitle': '编程随想的博客: 2012'}}, {'name': 'features', 'data': {'unsupported_browser_message': 'false', 'lightbox_img_parsing': 'false', 'sharing_get_link_dialog': 'false'}}, {'name': 'messages', 'data': {'linkCopiedToClipboard': '链接已复制到剪贴板&#65281;', 'postLink': '博文链接'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': '自定义', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': '编程随想的博客', 'description': '', 'url': 'https://program-think.blogspot.com/2012/', 'type': 'feed', 'isSingleItem': false, 'isMultipleItems': true, 'isError': false, 'isPage': false, 'isPost': false, 'isHomepage': false, 'isArchive': true, 'isLabelSearch': false, 'archive': {'year': 2012, 'rangeMessage': '目前显示的是 2012的博文'}}}]);
 _WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'main', null, document.getElementById('Header1'), {}, 'displayModeFull'));
-_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3847957767-lbx__zh_cn.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/3701092669-lbx__zh_cn.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
 _WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar', null, document.getElementById('HTML1'), {}, 'displayModeFull'));
 _WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'sidebar', null, document.getElementById('HTML2'), {}, 'displayModeFull'));
 _WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML3', 'sidebar', null, document.getElementById('HTML3'), {}, 'displayModeFull'));
