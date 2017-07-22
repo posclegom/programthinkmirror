@@ -65,4 +65,6 @@ go to first line
 $
 remove ending </feed> tag
 :wq
-cp newww point
+vi point
+update *ONLY the specific line* of the file being worked on
+:wq
