@@ -30,7 +30,7 @@ wc -l newww
 make sure both match
 ./master0.sh
 ./master6.sh
-rm * .html
+rm *.html
 ./master4.sh
 delete everything from <hosting directory of programthinkmirror> EXCEPT src/ forum4/ and the files in ./
 use midnight commander to copy everything from updated "blog" folder of BT Sync to <hosting directory of programthinkmirror>
@@ -59,7 +59,6 @@ and make resulting file the new section C
 vim section C
 go to second line
 1500x
-150x
 150x
 then x until the first <entry> tag
 go to first line
