@@ -3,13 +3,27 @@ to update comments section only:
 cd <hosting directory of programthinkmirror>
 cd forum4
 ./year.sh
+wc -l olddd
+wc -l newww
+make sure the two match
+ if not, then programthink has added a new blog article
+ in this case please refer to section below
 ./master0.sh
 ./master6.sh
 rm *.html
 ./master4.sh
 
 
-when programthink updates BT Sync blog folder:
+when programthink has added a new blog article:
+(note: sometimes programthink lags in updating the
+BTSync off-line blog folder, in this case one
+can update the forum section first, then update
+the blog when the updated off-line blog folder
+becomes available later. That is, updating the nlist
+without updating the mlist, and carry out all the
+steps associated with updating the nlist/forum without
+carrying out the final steps associated with updating
+the mlist and the overall blog, e.g. master7.sh, etc.)
 
 update src/mlist/mlist
 update src/nlist/nlist
