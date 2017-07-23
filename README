@@ -35,7 +35,7 @@ update src/nlist/nlist
 cp src/mlist/mlist .
 cp src/nlist/nlist forum4/
 cd forum4
-mv ../src/pt17/shift.sh forum4/
+mv ../src/pt17/shift.sh .
 edit seq <bign> ... to seq <bign+1> ...
 uncomment seq line
 ./shift.sh (RUN ONLY ONCE!!!)
@@ -46,7 +46,8 @@ vim olddd
 add "0\n" line to the beginning of olddd
 wc -l olddd
 wc -l newww
-make sure both match
+wc -l nlist
+make sure all 3 match
 ./master0.sh
 ./master6.sh
 rm *.html
