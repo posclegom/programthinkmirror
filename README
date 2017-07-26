@@ -47,7 +47,8 @@ add "0\n" line to the beginning of olddd
 wc -l olddd
 wc -l newww
 wc -l nlist
-make sure all 3 match
+wc -l ../mlist
+make sure all 4 match
 ./master0.sh
 ./master6.sh
 rm *.html
@@ -57,6 +58,10 @@ use midnight commander to copy everything from updated "blog" folder of BT Sync 
 ./master7.sh
 sed -i -e 's/http:/https:/g' index.html
 (other manual cosmetic changes are applied to index.html at your discretion, please refer to index.html in this repository)
+cd forum4
+vim point
+add initial comment count of new blog article to beginning of file
+:wq
 
 
 an additional note on src/:
