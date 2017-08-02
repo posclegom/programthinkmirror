@@ -79,9 +79,18 @@ comments >500 are all appended into section C
 pt17/sensor.sh reveals difference between last checkpoint
 when difference exceed 500,
 (use the lab/ directory for the following)
-append section C to current section B
-and make resulting file the new section C
-vim section C
+# append section C to current section B
+# and make resulting file the new section C
+vim xC.xml
+:set encoding=utf-8
+:wq
+vim xB.xml
+:set encoding=utf-8
+:wq
+cat xB.xml xC.xml > out.xml
+cp out.xml
+vim out.xml
+:set encoding=utf-8
 go to second line
 1500x
 150x
@@ -90,6 +99,8 @@ go to first line
 $
 remove ending </feed> tag
 :wq
+mv out.xml ../forum4/xC.xml
+cd ../forum4
 vi point
 update *ONLY the specific line* of the file being worked on
 :wq
