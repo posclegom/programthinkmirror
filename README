@@ -43,7 +43,7 @@ cp src/mlist/mlist .
 cp src/nlist/nlist forum4/
 cd forum4
 mv ../src/pt17/shift.sh .
-edit seq <bign> ... to seq <bign+1> ...
+edit seq <bign> ... to seq <bign++> ...
 uncomment seq line
 ./shift.sh (RUN ONLY ONCE!!!)
 recomment seq line
