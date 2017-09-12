@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm *.html
 for i in $( ls *.xml ); do
  echo item: $i
  i2=${i%".xml"}
