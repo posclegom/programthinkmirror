@@ -98,16 +98,15 @@ comments >500 are all appended into section C
 pt17/sensor.sh reveals difference between last checkpoint
 when difference exceed 500,
 (use the lab/ directory for the following)
-# append section C to current section B
+# append section B to current section C
 # and make resulting file the new section C
-vim nC.xml
-:set encoding=utf-8
-:wq
 vim nB.xml
 :set encoding=utf-8
 :wq
+vim nC.xml
+:set encoding=utf-8
+:wq
 cat nB.xml nC.xml > out.xml
-cp out.xml
 vim out.xml
 :set encoding=utf-8
 go to second line
