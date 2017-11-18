@@ -109,6 +109,7 @@ vim nC.xml
 cat nB.xml nC.xml > out.xml
 vim out.xml
 :set encoding=utf-8
+:set nowrap
 go to second line
 1500x
 150x
