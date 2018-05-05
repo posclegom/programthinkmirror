@@ -1,6 +1,7 @@
 Courtesy of @chenmaop:
 https://rawgit.com/posclegom/programthinkmirror/master/
 这个是墙内可达的
+对于repo过大不好下载有一个不太优雅的解决方案,就是利用 svn checkout https://github.com/posclegom/programthinkmirror/trunk/forum4 只选择性下载forum4文件夹,其余部分直接从btsync中复制过来
 
 for my dear old friend
 
