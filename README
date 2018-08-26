@@ -124,3 +124,24 @@ cd ../forum4
 vi point
 update *ONLY the specific line* of the file being worked on
 :wq
+
+note on code in labforum/ and src/pt21/
+these codes are for verifying that the number of comments
+for each forum are up-to-date with respect to actual counts
+in the real forums on program-think.blogspot.com
+how to use:
+after a fresh forum update
+cd forum4/
+cp *.xml ../labforum/
+cd ..
+cd labforum
+./master4.sh
+./count.sh > count
+diff count ../forum4/newww
+(result from diff should be totally blank, any output
+from diff indicates discrepancy between mirror forum
+and actual forum and can be investigated by following
+the line number on the display for diff, the line numbers
+start from 1, so 1 should be subtracted from the line
+number outputs in order to go to the relevant
+forums)
